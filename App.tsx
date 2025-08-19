@@ -5,7 +5,7 @@ import Configuration from './screens/configuration';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Configuration />
+      <Configuration /> //teste
     </View>
   );
 }
