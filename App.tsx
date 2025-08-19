@@ -19,5 +19,5 @@ const styles = StyleSheet.create({
   },
 });
 
-//EXEPLO PARA O DLOUGAS!!
-//TESTES
+
+
