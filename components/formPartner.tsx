@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   Text,
   Alert,
 } from 'react-native';
@@ -145,7 +145,7 @@ const PartnerForm = () => {
 
       {/* Quarta linha: Cidade, UF */}
       <View style={styles.row}>
-        <View style={styles.flexItem}>
+        <View style={styles.flexItemCity}>
           <Text style={styles.label}>Cidade</Text>
           <TextInput
             style={styles.input}
@@ -154,7 +154,7 @@ const PartnerForm = () => {
             onChangeText={setCity}
           />
         </View>
-        <View style={styles.flexItem}>
+        <View style={styles.flexItemUF}>
           <Text style={styles.label}>UF</Text>
           <TextInput
             style={styles.input}
@@ -167,37 +167,38 @@ const PartnerForm = () => {
         </View>
       </View>
 
-      {/* Quinta linha: Senha, Confirmar Senha */}
-      <View style={styles.row}>
-        <View style={styles.flexItem}>
-          <Text style={styles.label}>Senha</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+      {/* Quinta linha: Senha, Confirmar Senha e Botão */}
+      <View style={styles.rowPassword}>
+        <View style={styles.passwordContainer}>
+          <View style={styles.flexItemSmall}>
+            <Text style={styles.label}>Senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Senha"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
+          <View style={styles.flexItemSmall}>
+            <Text style={styles.label}>Confirmar Senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Confirmar Senha"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
+          </View>
         </View>
-        <View style={styles.flexItem}>
-          <Text style={styles.label}>Confirmar Senha</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirmar Senha"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
+        <View style={styles.buttonWrapper}>
+          <TouchableOpacity
+            style={styles.buttonContainerSmall}
+            onPress={handleSaveChanges}
+          >
+            <Text style={styles.buttonText}>Salvar Alterações</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-
-      {/* Botão */}
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Salvar Alterações"
-          onPress={handleSaveChanges}
-          color="#007BFF"
-        />
       </View>
     </View>
   );
@@ -221,21 +222,32 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginBottom: 8,
-    gap: 8,
   },
   flexItem: {
-    flex: 1,
+    flex: 0.4,
+    marginHorizontal: 4,
+  },
+  flexItemCity: {
+    flex: 0.3,
+    marginHorizontal: 4,
+  },
+  flexItemUF: {
+    flex: 0.05,
     marginHorizontal: 4,
   },
   flexItem2: {
-    flex: 2,
+    flex: 0.6,
     marginHorizontal: 4,
   },
   flexItem3: {
-    flex: 1.2,
+    flex: 0.3,
     marginHorizontal: 4,
+  },
+  flexItemSmall: {
+    flex: 0.4,
+    marginHorizontal: 0,
   },
   label: {
     fontSize: 15,
@@ -254,6 +266,261 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 4,
     fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputName: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputLastName: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputPhone: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputEmail: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputCpf: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  }, 
+  inputAddress: {
+    width: 3002,
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputNumber: {
+    width: 89,
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputNeighborhood: {
+    width: 302,
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputZipCode: {
+    width: 89,
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputCity: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputState: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputPassword: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
+  },
+  inputConfirmPassword: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    fontSize: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 12,
   },
   buttonContainer: {
     margin: 16,
@@ -261,6 +528,40 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
     width: '100%',
+  },
+  buttonContainerSmall: {
+    marginHorizontal: 4,
+    borderRadius: 10,
+    overflow: 'hidden',
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#005A93',
+    paddingHorizontal: 20,
+    minWidth: 140,
+    width: 195,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  buttonWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 54,
+    marginTop: 24,
+  },
+  rowPassword: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    alignItems: 'flex-end',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    flex: 1,
   },
 });
 
