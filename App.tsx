@@ -18,3 +18,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+//EXEPLO PARA O DLOUGAS!!
+//TESTES
