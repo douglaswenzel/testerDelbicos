@@ -206,6 +206,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
+    backgroundColor: 'white',
+    borderRadius: 8,
     paddingVertical: 40,
     paddingHorizontal: 16,
     minHeight: '80%',
