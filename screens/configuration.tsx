@@ -62,7 +62,7 @@ const Configuration = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: 1200,
     flexDirection: 'row',
     backgroundColor: '#DDE6F0',
   },
