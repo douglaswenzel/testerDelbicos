@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,12 @@ import {
   StyleSheet,
   ImageSourcePropType,
   ViewStyle,
+  Modal,
+  Animated,
+  Easing,
+  Alert,
 } from 'react-native';
-const EditIcon = require ("../assets/edit.png");
+const EditIcon = require("../assets/edit.png");
 
 interface UserProfileProps {
   userName?: string;
@@ -16,6 +20,9 @@ interface UserProfileProps {
   avatarSource?: ImageSourcePropType;
   logoSource?: ImageSourcePropType;
   onEditPress?: () => void;
+  onAvatarChange?: (newAvatar: string) => void;
+  onTakePhoto?: () => void;
+  onPickFromGallery?: () => void;
   style?: ViewStyle;
 }
 
@@ -25,15 +32,141 @@ const UserProfile: React.FC<UserProfileProps> = ({
   avatarSource,
   logoSource,
   onEditPress,
+  onAvatarChange,
+  onTakePhoto,
+  onPickFromGallery,
   style,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const [scaleAnim] = useState(new Animated.Value(1));
+  const [overlayOpacity] = useState(new Animated.Value(0));
+
+  const handleAvatarPress = () => {
+    setShowOptions(true);
+  };
+
+  const handleAvatarLongPress = () => {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 100,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 100,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowOptions(true);
+    });
+  };
+
+  const handleHoverIn = () => {
+    setIsHovered(true);
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 1.05,
+        duration: 200,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.timing(overlayOpacity, {
+        toValue: 1,
+        duration: 200,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleHoverOut = () => {
+    setIsHovered(false);
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 200,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.timing(overlayOpacity, {
+        toValue: 0,
+        duration: 200,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleTakePhoto = () => {
+    if (onTakePhoto) {
+      onTakePhoto();
+    } else {
+      Alert.alert(
+        'Tirar Foto',
+        'Funcionalidade de câmera será implementada aqui.',
+        [{ text: 'OK' }]
+      );
+    }
+    setShowOptions(false);
+  };
+
+  const handlePickFromGallery = () => {
+    if (onPickFromGallery) {
+      onPickFromGallery();
+    } else {
+      Alert.alert(
+        'Escolher da Galeria',
+        'Funcionalidade de galeria será implementada aqui.',
+        [{ text: 'OK' }]
+      );
+    }
+    setShowOptions(false);
+  };
+
+  const removePhoto = () => {
+    Alert.alert(
+      'Remover foto',
+      'Tem certeza que deseja remover a foto de perfil?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Remover',
+          style: 'destructive',
+          onPress: () => {
+            onAvatarChange?.('');
+            setShowOptions(false);
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <View style={[styles.container, style]}>
       <View style={styles.content}>
         
         <View style={styles.avatarSection}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatarCircle}>
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={handleAvatarPress}
+            onLongPress={handleAvatarLongPress}
+            onPressIn={handleHoverIn}
+            onPressOut={handleHoverOut}
+            activeOpacity={0.9}
+          >
+            <Animated.View 
+              style={[
+                styles.avatarCircle,
+                { transform: [{ scale: scaleAnim }] }
+              ]}
+            >
               {avatarSource ? (
                 <Image 
                   source={avatarSource} 
@@ -55,16 +188,24 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   )}
                 </View>
               )}
-            </View>
-          </View>
+
+              <Animated.View 
+                style={[
+                  styles.avatarOverlay,
+                  { opacity: overlayOpacity }
+                ]}
+              >
+                <Text style={styles.overlayText}>Alterar Foto</Text>
+              </Animated.View>
+            </Animated.View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.infoSection}>
           <View style={styles.nameContainer}>
             <Text style={styles.userName}>{userName}</Text>
-            
-
           </View>
+          
           <View style={styles.userAddress}>
             <Text style={styles.address}>
               {address}
@@ -74,14 +215,57 @@ const UserProfile: React.FC<UserProfileProps> = ({
               onPress={onEditPress}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <View style={styles.editIcon}>
-                <Image source={EditIcon} style={styles.editIcon}/>
-              </View>
+              <Image source={EditIcon} style={styles.editIconImage}/>
             </TouchableOpacity>
           </View>
         </View>
 
       </View>
+
+      <Modal
+        visible={showOptions}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowOptions(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowOptions(false)}
+        >
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity 
+              style={styles.optionButton}
+              onPress={handleTakePhoto}
+            >
+              <Text style={styles.optionText}>Tirar Foto</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.optionButton}
+              onPress={handlePickFromGallery}
+            >
+              <Text style={styles.optionText}>Escolher da Galeria</Text>
+            </TouchableOpacity>
+            
+            {avatarSource && (
+              <TouchableOpacity 
+                style={[styles.optionButton, styles.removeOption]}
+                onPress={removePhoto}
+              >
+                <Text style={[styles.optionText, styles.removeText]}>Remover Foto</Text>
+              </TouchableOpacity>
+            )}
+            
+            <TouchableOpacity 
+              style={[styles.optionButton, styles.cancelOption]}
+              onPress={() => setShowOptions(false)}
+            >
+              <Text style={styles.optionText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
@@ -117,11 +301,11 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 6,
   },
   avatarImage: {
     width: 152,
@@ -135,6 +319,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+  },
+  avatarOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 79,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  overlayText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   logoImage: {
     width: 142,
@@ -167,7 +364,9 @@ const styles = StyleSheet.create({
   },
   userAddress: {
     flexDirection: 'row',
-    width: 529,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   userName: {
     fontFamily: 'Inter',
@@ -178,24 +377,13 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   editButton: {
-    padding: 4,
+    padding: 8,
+    marginLeft: 12,
   },
-  editIcon: {
+  editIconImage: {
     width: 20,
     height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  editIconLine: {
-    position: 'absolute',
-    width: 14,
-    height: 14,
-    borderWidth: 2,
-    borderColor: '#FC8200',
-  },
-  editIconLineRotated: {
-    transform: [{ rotate: '90deg' }],
+    tintColor: '#FC8200',
   },
   address: {
     fontFamily: 'Inter',
@@ -203,7 +391,53 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 24,
     color: '#000000',
-    marginTop: 4,
+    flex: 1,
+    marginRight: 12,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  optionsContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    width: '80%',
+    maxWidth: 300,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  optionButton: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000000',
+    textAlign: 'center',
+  },
+  removeOption: {
+    borderBottomWidth: 0,
+    marginTop: 8,
+  },
+  removeText: {
+    color: '#FF3B30',
+  },
+  cancelOption: {
+    borderBottomWidth: 0,
+    marginTop: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
   },
 });
 
