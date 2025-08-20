@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   flexItemUF: {
-    flex: 0.05,
+    flex: 0.07,
     marginHorizontal: 4,
   },
   flexItem2: {
@@ -542,8 +542,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '400',
   },
   buttonWrapper: {
     justifyContent: 'center',
