@@ -37,6 +37,8 @@ const PartnerForm = () => {
       zipCode,
       city,
       state,
+      password,
+      confirmPassword,
     });
   };
 
@@ -46,7 +48,7 @@ const PartnerForm = () => {
         <View style={styles.flexItem}>
           <Text style={styles.label}>Nome</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputFixed}
             placeholder="Nome"
             value={firstName}
             onChangeText={setFirstName}
@@ -55,7 +57,7 @@ const PartnerForm = () => {
         <View style={styles.flexItem}>
           <Text style={styles.label}>Sobrenome</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputFixed}
             placeholder="Sobrenome"
             value={lastName}
             onChangeText={setLastName}
@@ -78,7 +80,7 @@ const PartnerForm = () => {
         <View style={styles.flexItem}>
           <Text style={styles.label}>E-mail</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputFixed}
             placeholder="E-mail"
             value={email}
             onChangeText={setEmail}
@@ -86,10 +88,10 @@ const PartnerForm = () => {
             autoCapitalize="none"
           />
         </View>
-        <View style={styles.flexItem}>
+        <View style={styles.flexItemCpf}>
           <Text style={styles.label}>CPF</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputCpf}
             placeholder="CPF"
             value={cpf}
             onChangeText={setCpf}
@@ -103,7 +105,7 @@ const PartnerForm = () => {
         <View style={styles.flexItem2}>
           <Text style={styles.label}>Endereço</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputFixed}
             placeholder="Endereço"
             value={address}
             onChangeText={setAddress}
@@ -145,7 +147,7 @@ const PartnerForm = () => {
         <View style={styles.flexItemCity}>
           <Text style={styles.label}>Cidade</Text>
           <TextInput
-            style={styles.input}
+            style={styles.inputFixed}
             placeholder="Cidade"
             value={city}
             onChangeText={setCity}
@@ -170,7 +172,7 @@ const PartnerForm = () => {
           <View style={styles.flexItemSmall}>
             <Text style={styles.label}>Senha</Text>
             <TextInput
-              style={styles.input}
+              style={styles.inputFixed}
               placeholder="Senha"
               value={password}
               onChangeText={setPassword}
@@ -180,7 +182,7 @@ const PartnerForm = () => {
           <View style={styles.flexItemSmall}>
             <Text style={styles.label}>Confirmar Senha</Text>
             <TextInput
-              style={styles.input}
+              style={styles.inputFixed}
               placeholder="Confirmar Senha"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
@@ -226,27 +228,32 @@ const styles = StyleSheet.create({
   },
   flexItem: {
     flex: 0.4,
-    marginHorizontal: 4,
+    marginHorizontal: 8, // diminuído
+  },
+  flexItemCpf: {
+    flex: 0.22,
+    marginLeft: 8, // diminuído
+    marginRight: 0,
   },
   flexItemCity: {
     flex: 0.3,
-    marginHorizontal: 4,
+    marginHorizontal: 8, // diminuído
   },
   flexItemUF: {
     flex: 0.07,
-    marginHorizontal: 4,
+    marginHorizontal: 8, // diminuído
   },
   flexItem2: {
     flex: 0.6,
-    marginHorizontal: 4,
+    marginHorizontal: 8, // diminuído
   },
   flexItem3: {
     flex: 0.3,
-    marginHorizontal: 4,
+    marginHorizontal: 8, // diminuído
   },
   flexItemSmall: {
     flex: 0.4,
-    marginHorizontal: 0,
+    marginHorizontal: 8, // diminuído
   },
   label: {
     fontSize: 15,
@@ -274,8 +281,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 12,
   },
-  inputName: {
-    width: '100%',
+  inputFixed: {
+    width: 250,
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
@@ -284,64 +291,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 4,
     fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputLastName: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputPhone: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputEmail: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -352,158 +301,7 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   inputCpf: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  }, 
-  inputAddress: {
-    width: 3002,
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputNumber: {
-    width: 89,
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputNeighborhood: {
-    width: 302,
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputZipCode: {
-    width: 89,
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputCity: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputState: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputPassword: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 12,
-  },
-  inputConfirmPassword: {
-    width: '100%',
+    width: 150,
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
