@@ -55,8 +55,6 @@ const Configuration = () => {
       <View style={styles.mainContent}>
         {renderScreen()}
       </View>
-
-      <StatusBar backgroundColor="#005A93" barStyle="light-content" />
     </View>
   );
 };
@@ -64,8 +62,9 @@ const Configuration = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#DDE6F0',
   },
   loadingContainer: {
     flex: 1,
