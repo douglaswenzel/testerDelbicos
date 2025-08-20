@@ -3,6 +3,7 @@ import { StatusBar, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
 import MenuNavegacao from '../components/MenuNavegacao';
 import TextCostumization from '../components/TextCostumization';
+import PartnerForm from '../components/formPartner';
 
 const Configuration = () => {
   const [currentScreen, setCurrentScreen] = useState('DadosConta');
@@ -18,7 +19,7 @@ const Configuration = () => {
       case 'DadosConta':
         return (
           <TextCostumization style={styles.content}>
-            Conteúdo de Dados da Conta
+            <PartnerForm />
           </TextCostumization>
         );
       case 'MeusAgendamentos':
