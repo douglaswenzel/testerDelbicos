@@ -4,6 +4,7 @@ import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
 import MenuNavegacao from '../components/MenuNavegacao';
 import TextCostumization from '../components/TextCostumization';
 import PartnerForm from '../components/formPartner';
+import UserProfile from '../components/UserProfile';
 
 const Configuration = () => {
   const [currentScreen, setCurrentScreen] = useState('DadosConta');
@@ -47,13 +48,17 @@ const Configuration = () => {
 
   return (
     <View style={styles.container}>
-      <MenuNavegacao 
-        initialActive={currentScreen}
-        onItemSelected={setCurrentScreen}
-      />
-      
-      <View style={styles.mainContent}>
-        {renderScreen()}
+      <View style={styles.topbox}>
+        <UserProfile />
+      </View>
+      <View style={styles.botbox}>
+        <MenuNavegacao 
+          initialActive={currentScreen}
+          onItemSelected={setCurrentScreen}
+        />
+        <View style={styles.mainContent}>
+          {renderScreen()}
+        </View>
       </View>
     </View>
   );
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: 1200,
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: '#DDE6F0',
   },
   loadingContainer: {
@@ -82,6 +87,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333',
   },
+  botbox: {
+    flexDirection: 'row',
+  },
+  topbox: {
+
+  }
 });
 
 export default Configuration;
