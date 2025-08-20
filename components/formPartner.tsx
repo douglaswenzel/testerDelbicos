@@ -42,9 +42,6 @@ const PartnerForm = () => {
 
   return (
     <View style={styles.formContainer}>
-      <Text style={styles.title}>Cadastro de Parceiro</Text>
-
-      {/* Primeira linha: Nome, Sobrenome, Telefone */}
       <View style={styles.row}>
         <View style={styles.flexItem}>
           <Text style={styles.label}>Nome</Text>
