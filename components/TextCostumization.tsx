@@ -1,21 +1,20 @@
-import React from 'react';
-import { Text as RNText, TextProps, StyleSheet } from 'react-native';
+import React from "react";
 
-const TextCostumization: React.FC<TextProps> = ({ style, ...props }) => {
-  return (
-    <RNText 
-      style={[styles.textoPadrao, style]} 
-      {...props}
-    />
-  );
+type Props = React.HTMLAttributes<HTMLSpanElement> & {
+  children: React.ReactNode;
 };
 
-const styles = StyleSheet.create({
-  textoPadrao: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
-    includeFontPadding: false,
-  },
-});
+const TextCostumization: React.FC<Props> = ({ style, children, ...props }) => (
+  <span
+    style={{
+      fontFamily: "Inter, Arial, sans-serif",
+      fontWeight: 400,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </span>
+);
 
 export default TextCostumization;
