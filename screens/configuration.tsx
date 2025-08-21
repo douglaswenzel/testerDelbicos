@@ -1,98 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar, StyleSheet, View, ActivityIndicator } from 'react-native';
-import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
+
+import React, { useState } from 'react';
 import MenuNavegacao from '../components/MenuNavegacao';
-import TextCostumization from '../components/TextCostumization';
-import PartnerForm from '../components/formPartner';
 import UserProfile from '../components/UserProfile';
+import Formnovo from '../components/Formnovo';
+
 
 const Configuration = () => {
   const [currentScreen, setCurrentScreen] = useState('DadosConta');
-  
-
-  const [fontsLoaded] = useFonts({
-    'Inter': Inter_400Regular,
-  });
-
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'DadosConta':
-        return (
-          <TextCostumization style={styles.content}>
-            <PartnerForm />
-          </TextCostumization>
-        );
+        return <Formnovo />;
       case 'MeusAgendamentos':
-        return (
-          <TextCostumization style={styles.content}>
-            Conteúdo de Meus Agendamentos
-          </TextCostumization>
-        );
+        return <div style={contentStyle}>Conteúdo de Meus Agendamentos</div>;
       default:
-        return (
-          <TextCostumization style={styles.content}>
-            Selecione uma opção no menu
-          </TextCostumization>
-        );
+        return <div style={contentStyle}>Selecione uma opção no menu</div>;
     }
   };
 
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#005A93" />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.topbox}>
+    <div style={containerStyle}>
+      <div style={sidebarStyle}>
         <UserProfile />
-      </View>
-      <View style={styles.botbox}>
-        <MenuNavegacao 
+        <MenuNavegacao
           initialActive={currentScreen}
           onItemSelected={setCurrentScreen}
         />
-        <View style={styles.mainContent}>
-          {renderScreen()}
-        </View>
-      </View>
-    </View>
+      </div>
+      <div style={mainContentStyle}>
+        {renderScreen()}
+      </div>
+    </div>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: 1200,
-    flexDirection: 'column',
-    backgroundColor: '#DDE6F0',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  mainContent: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
-  },
-  content: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#333',
-  },
-  botbox: {
-    flexDirection: 'row',
-  },
-  topbox: {
-
-  }
-});
+// Estilos web
+const containerStyle: React.CSSProperties = {
+  display: 'flex',
+  minHeight: '100vh',
+  background: '#dde6f0',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+};
+const sidebarStyle: React.CSSProperties = {
+  width: 320,
+  minHeight: '100vh',
+  background: '#fff',
+  boxShadow: '2px 0 8px rgba(0,0,0,0.04)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '32px 0',
+};
+const mainContentStyle: React.CSSProperties = {
+  flex: 1,
+  padding: '48px 32px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+};
+const contentStyle: React.CSSProperties = {
+  fontSize: 18,
+  textAlign: 'center',
+  color: '#333',
+};
 
 export default Configuration;

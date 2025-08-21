@@ -1,7 +1,12 @@
+
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
 import TextCostumization from './TextCostumization';
+import Formnovo from './Formnovo';
+
+type MenuNavegacaoProps = {
+  onItemSelected?: (screen: string) => void;
+  initialActive?: string;
+};
 
 type MenuItem = {
   id: number;
@@ -9,19 +14,12 @@ type MenuItem = {
   screen: string;
 };
 
-type MenuNavegacaoProps = {
-  onItemSelected?: (screen: string) => void;
-  initialActive?: string;
-};
 
-const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({ 
-  onItemSelected, 
-  initialActive = 'DadosConta' 
+const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
+  onItemSelected,
+  initialActive = 'DadosConta',
 }) => {
   const [activeItem, setActiveItem] = useState(initialActive);
-  const [fontsLoaded] = useFonts({
-    Inter: Inter_400Regular,
-  });
 
   const menuItems: MenuItem[] = [
     { id: 1, title: 'Dados da Conta', screen: 'DadosConta' },
@@ -42,64 +40,68 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     }
   };
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  return (
-    <View style={styles.menuContainer}>
-      {menuItems.map((item) => (
-        <TouchableOpacity
-          key={item.id}
-          style={[
-            styles.menuItem,
-            item.screen === activeItem 
-              ? styles.activeMenuItem 
-              : styles.inactiveMenuItem
-          ]}
-          onPress={() => handlePress(item.screen)}
-        >
-          <TextCostumization 
-            style={[
-              styles.menuText,
-              item.screen === activeItem && styles.activeMenuText
-            ]}
-          >
-            {item.title}
-          </TextCostumization>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  menuContainer: {
-    marginVertical: 20,
+  // Estilos para web
+  const menuContainer: React.CSSProperties = {
+    margin: '20px 0',
     maxWidth: '100%',
-  },
-  menuItem: {
+  };
+  const menuItem: React.CSSProperties = {
     width: 259,
     height: 41,
     borderRadius: 20,
     marginBottom: 10,
-    justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
     paddingLeft: 15,
-  },
-  activeMenuItem: {
+    cursor: 'pointer',
+    userSelect: 'none',
+    border: 'none',
+    background: 'none',
+  };
+  const activeMenuItem: React.CSSProperties = {
     backgroundColor: '#005A93',
-  },
-  inactiveMenuItem: {
+  };
+  const inactiveMenuItem: React.CSSProperties = {
     backgroundColor: '#FC8200',
-  },
-  menuText: {
+  };
+  const menuText: React.CSSProperties = {
     fontSize: 23,
-    fontWeight: '400',
-    color: '#000000',
-  },
-  activeMenuText: {
-    color: '#FFFFFF',
-  },
-});
+    fontWeight: 400,
+    color: '#000',
+  };
+  const activeMenuText: React.CSSProperties = {
+    color: '#fff',
+  };
+
+  return (
+    <div>
+      <div style={menuContainer}>
+        {menuItems.map((item) => {
+          const isActive = item.screen === activeItem;
+          return (
+            <button
+              key={item.id}
+              style={{
+                ...menuItem,
+                ...(isActive ? activeMenuItem : inactiveMenuItem),
+              }}
+              onClick={() => handlePress(item.screen)}
+            >
+              <TextCostumization
+                style={{
+                  ...menuText,
+                  ...(isActive ? activeMenuText : {}),
+                }}
+              >
+                {item.title}
+              </TextCostumization>
+            </button>
+          );
+        })}
+      </div>
+      <Formnovo />
+    </div>
+  );
+};
 
 export default MenuNavegacao;
