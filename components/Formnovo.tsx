@@ -104,6 +104,17 @@ export default function Formnovo() {
               keyboardType="numeric"
             />
           </View>
+          <View style={styles.inputColCep}>
+            <Text style={styles.label}><TextCostumization>CEP</TextCostumization></Text>
+            <TextInput
+              style={styles.input}
+              value={form.cep}
+              onChangeText={text => handleChange("cep", text)}
+              placeholder="CEP"
+              placeholderTextColor="#aaa"
+              keyboardType="numeric"
+            />
+          </View>
         </View>
 
         <View style={styles.row}>
@@ -136,17 +147,6 @@ export default function Formnovo() {
               onChangeText={text => handleChange("bairro", text)}
               placeholder="Bairro"
               placeholderTextColor="#aaa"
-            />
-          </View>
-          <View style={styles.inputColCep}>
-            <Text style={styles.label}><TextCostumization>CEP</TextCostumization></Text>
-            <TextInput
-              style={styles.input}
-              value={form.cep}
-              onChangeText={text => handleChange("cep", text)}
-              placeholder="CEP"
-              placeholderTextColor="#aaa"
-              keyboardType="numeric"
             />
           </View>
         </View>
@@ -281,6 +281,14 @@ export default function Formnovo() {
       marginRight: 0,
       alignItems: 'flex-start',
     },
+    inputColCep: {
+      flexBasis: '100%',
+      minWidth: 100,
+      maxWidth: 140,
+      marginRight: 0,
+      alignItems: 'flex-start',
+      marginLeft: 18,
+    },
       // Terceira linha: Endereço (maior), Número (menor), Bairro (maior), CEP (menor)
     inputColEndereco: {
       flexBasis: '38%',
@@ -303,13 +311,7 @@ export default function Formnovo() {
       marginRight: 18,
       alignItems: 'flex-start',
     },
-    inputColCep: {
-      flexBasis: '15%',
-      minWidth: 100,
-      maxWidth: 140,
-      marginRight: 0,
-      alignItems: 'flex-start',
-    },
+
     // Quarta linha: Cidade (maior), UF (menor)
     inputColUf: {
       flexBasis: '25%',
