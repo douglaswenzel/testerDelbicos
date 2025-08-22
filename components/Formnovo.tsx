@@ -1,5 +1,6 @@
 
 
+
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
@@ -25,6 +26,7 @@ export default function Formnovo() {
     cidade: "Rio de Janeiro",
     uf: "RJ",
     senha: "********************",
+
     confirmarSenha: "********************"
   });
 
@@ -41,8 +43,9 @@ export default function Formnovo() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.formWrapper}>
         {/* Primeira linha */}
+
         <View style={styles.row}>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColNome}>
             <Text style={styles.label}><TextCostumization>Nome</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -52,7 +55,7 @@ export default function Formnovo() {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColSobrenome}>
             <Text style={styles.label}><TextCostumization>Sobrenome</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -62,7 +65,7 @@ export default function Formnovo() {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColTelefone}>
             <Text style={styles.label}><TextCostumization>Telefone</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -76,8 +79,9 @@ export default function Formnovo() {
         </View>
 
         {/* Segunda linha */}
+
         <View style={styles.row}>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColSenha}>
             <Text style={styles.label}><TextCostumization>E-mail</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -89,7 +93,7 @@ export default function Formnovo() {
               autoCapitalize="none"
             />
           </View>
-          <View style={styles.inputColSmall}>
+          <View style={styles.inputColCpf}>
             <Text style={styles.label}><TextCostumization>CPF</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -102,9 +106,8 @@ export default function Formnovo() {
           </View>
         </View>
 
-        {/* Terceira linha */}
         <View style={styles.row}>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColEndereco}>
             <Text style={styles.label}><TextCostumization>Endereço</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -114,7 +117,7 @@ export default function Formnovo() {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View style={styles.inputColSmall}>
+          <View style={styles.inputColNumero}>
             <Text style={styles.label}><TextCostumization>Número</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -125,7 +128,7 @@ export default function Formnovo() {
               keyboardType="numeric"
             />
           </View>
-          <View style={styles.inputColMedium}>
+          <View style={styles.inputColBairro}>
             <Text style={styles.label}><TextCostumization>Bairro</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -135,7 +138,7 @@ export default function Formnovo() {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View style={styles.inputColSmall}>
+          <View style={styles.inputColCep}>
             <Text style={styles.label}><TextCostumization>CEP</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -150,7 +153,7 @@ export default function Formnovo() {
 
         {/* Quarta linha */}
         <View style={styles.row}>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColCidade}>
             <Text style={styles.label}><TextCostumization>Cidade</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -160,7 +163,7 @@ export default function Formnovo() {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View style={styles.inputColSmall}>
+          <View style={styles.inputColUf}>
             <Text style={styles.label}><TextCostumization>UF</TextCostumization></Text>
             <View style={styles.pickerWrapper}>
               <Picker
@@ -180,7 +183,7 @@ export default function Formnovo() {
 
         {/* Quinta linha */}
         <View style={styles.row}>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColSenha}>
             <Text style={styles.label}><TextCostumization>Senha</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -191,7 +194,7 @@ export default function Formnovo() {
               secureTextEntry
             />
           </View>
-          <View style={styles.inputColLarge}>
+          <View style={styles.inputColConfirmarSenha}>
             <Text style={styles.label}><TextCostumization>Confirmar Senha</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -242,33 +245,111 @@ export default function Formnovo() {
       marginBottom: 18,
       flexWrap: 'wrap',
     },
-    inputColLarge: {
-      flex: 1,
-      minWidth: 250,
-      maxWidth: 340,
+    // Primeira linha: 3 campos iguais
+    inputColNome:{
+      minWidth: 230,
+      maxWidth: 230,
       marginRight: 18,
-      marginBottom: 0,
       alignItems: 'flex-start',
     },
-    inputColMedium: {
-      minWidth: 170,
+    inputColSobrenome:{
+      flexBasis: '38%',
+      minWidth: 230,
+      maxWidth: 230,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+    inputColTelefone: {
+      minWidth: 200,
+      maxWidth: 200,
+      marginRight: 0,
+      alignItems: 'flex-start',
+    },
+      // Segunda linha: E-mail (maior), CPF (menor)
+    inputColEmail: {
+      flexBasis: '65%',
+      minWidth: 230,
+      maxWidth: 230,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+
+    inputColCpf:{
+      flexBasis: '35%',
+      minWidth: 180,
+      maxWidth: 180,
+      marginRight: 0,
+      alignItems: 'flex-start',
+    },
+      // Terceira linha: Endereço (maior), Número (menor), Bairro (maior), CEP (menor)
+    inputColEndereco: {
+      flexBasis: '38%',
+      minWidth: 230,
+      maxWidth: 230,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+    inputColNumero: {
+      flexBasis: '15%',
+      minWidth: 80,
+      maxWidth: 110,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+    inputColBairro: {
+      flexBasis: '27%',
+      minWidth: 150,
       maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
-    inputColSmall: {
-      minWidth: 110,
+    inputColCep: {
+      flexBasis: '15%',
+      minWidth: 100,
       maxWidth: 140,
+      marginRight: 0,
+      alignItems: 'flex-start',
+    },
+    // Quarta linha: Cidade (maior), UF (menor)
+    inputColUf: {
+      flexBasis: '25%',
+      minWidth: 80,
+      maxWidth: 110,
+      marginRight: 0,
+      alignItems: 'flex-start',
+    },
+        inputColCidade: {
+      flexBasis: '70%',
+      minWidth: 230,
+      maxWidth: 230,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+    // Quinta linha: Senha (maior), Confirmar Senha (maior), Botão (menor)
+    inputColSenha: {
+      flexBasis: '40%',
+      minWidth: 230,
+      maxWidth: 230,
+      marginRight: 18,
+      alignItems: 'flex-start',
+    },
+    inputColConfirmarSenha: {
+      flexBasis: '40%',
+      minWidth: 230,
+      maxWidth: 230,
       marginRight: 18,
       alignItems: 'flex-start',
     },
     buttonCol: {
-      justifyContent: 'flex-end',
-      alignItems: 'flex-end',
-      flex: 1,
-      minWidth: 180,
-      maxWidth: 220,
+      minWidth: 10,
+      maxWidth: 10,
+      alignSelf: 'center',
+      alignItems: 'center',
+      height: 55,
+      marginLeft: 100,
+      marginTop: 20,
     },
+
     label: {
       marginBottom: 4,
       fontWeight: '500',
@@ -301,11 +382,13 @@ export default function Formnovo() {
     button: {
       backgroundColor: '#006494',
       borderRadius: 6,
-      paddingVertical: 12,
-      paddingHorizontal: 32,
+      height: 55,
       marginTop: 0,
       borderWidth: 2,
       borderColor: '#fff',
+      fontSize: 2,
+      width: 150,
+      justifyContent: 'center',
       ...Platform.select({
         ios: {
           shadowColor: '#000',
@@ -320,9 +403,11 @@ export default function Formnovo() {
     },
     buttonText: {
       color: '#fff',
-      fontSize: 20,
+      fontSize: 15,
       fontWeight: '500',
       textAlign: 'center',
+      padding: 0,
+      width: '100%',
     },
     pickerWrapper: {
       width: '100%',
