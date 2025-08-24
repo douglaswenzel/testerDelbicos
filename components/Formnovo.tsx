@@ -247,37 +247,37 @@ export default function Formnovo() {
     },
     // Primeira linha: 3 campos iguais
     inputColNome:{
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
     inputColSobrenome:{
       flexBasis: '38%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
     inputColTelefone: {
-      minWidth: 200,
-      maxWidth: 200,
+      minWidth: 175,
+      maxWidth: 175,
       marginRight: 0,
       alignItems: 'flex-start',
     },
       // Segunda linha: E-mail (maior), CPF (menor)
     inputColEmail: {
       flexBasis: '65%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
 
     inputColCpf:{
       flexBasis: '35%',
-      minWidth: 180,
-      maxWidth: 180,
+      minWidth: 175,
+      maxWidth: 175,
       marginRight: 0,
       alignItems: 'flex-start',
     },
@@ -292,8 +292,8 @@ export default function Formnovo() {
       // Terceira linha: Endereço (maior), Número (menor), Bairro (maior), CEP (menor)
     inputColEndereco: {
       flexBasis: '38%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
@@ -322,23 +322,23 @@ export default function Formnovo() {
     },
         inputColCidade: {
       flexBasis: '70%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
     // Quinta linha: Senha (maior), Confirmar Senha (maior), Botão (menor)
     inputColSenha: {
       flexBasis: '40%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
     inputColConfirmarSenha: {
       flexBasis: '40%',
-      minWidth: 230,
-      maxWidth: 230,
+      minWidth: 200,
+      maxWidth: 200,
       marginRight: 18,
       alignItems: 'flex-start',
     },
