@@ -49,7 +49,7 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     width: 259,
     height: 41,
     borderRadius: 20,
-    marginBottom: 10,
+    marginBottom: 17,
     display: 'flex',
     alignItems: 'center',
     paddingLeft: 15,
