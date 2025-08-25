@@ -222,7 +222,7 @@ export default function Formnovo() {
       backgroundColor: '#f3f6fa',
       paddingVertical: 24,
       alignItems: 'center',
-      minHeight: 700,
+      minWidth: 1100,
     },
     formWrapper: {
       backgroundColor: '#fff',
