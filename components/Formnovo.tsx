@@ -219,8 +219,7 @@ export default function Formnovo() {
   const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
-      backgroundColor: '#f3f6fa',
-      paddingVertical: 24,
+      paddingVertical: 19,
       alignItems: 'center',
       minWidth: 1100,
     },

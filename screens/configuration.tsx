@@ -23,13 +23,12 @@ const Configuration = () => {
     <div style={containerStyle}>
       <div style={sidebarStyle}>
         <UserProfile />
-        <MenuNavegacao
-          initialActive={currentScreen}
-          onItemSelected={setCurrentScreen}
-        />
       </div>
-      <div style={mainContentStyle}>
-        {renderScreen()}
+      <div style ={secondSection}>
+        <MenuNavegacao initialActive = {currentScreen} onItemSelected={setCurrentScreen} />
+        <div style={mainContentStyle}>
+          {renderScreen()}
+        </div>
       </div>
     </div>
   );
@@ -38,26 +37,23 @@ const Configuration = () => {
 // Estilos web
 const containerStyle: React.CSSProperties = {
   display: 'flex',
-  minHeight: '100vh',
   background: '#dde6f0',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
 };
 const sidebarStyle: React.CSSProperties = {
-  width: 320,
-  minHeight: '100vh',
-  background: '#fff',
-  boxShadow: '2px 0 8px rgba(0,0,0,0.04)',
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   alignItems: 'center',
   padding: '32px 0',
 };
 const mainContentStyle: React.CSSProperties = {
   flex: 1,
-  padding: '48px 32px',
   display: 'flex',
+  backgroundColor: 'black',
   flexDirection: 'column',
+  background: 'transparent',
   alignItems: 'center',
   justifyContent: 'flex-start',
 };
@@ -66,5 +62,10 @@ const contentStyle: React.CSSProperties = {
   textAlign: 'center',
   color: '#333',
 };
+
+const secondSection: React.CSSProperties = {
+  flexDirection: 'row',
+  display: 'flex'
+}
 
 export default Configuration;
