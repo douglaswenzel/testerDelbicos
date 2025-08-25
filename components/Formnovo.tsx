@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import TextCostumization from "./TextCostumization";
 
@@ -74,7 +83,7 @@ export default function Formnovo() {
 
         {/* Segunda linha */}
         <View style={styles.row}>
-          <View style={styles.inputColSenha}>
+          <View style={styles.inputColEmail}>
             <Text style={styles.label}><TextCostumization>E-mail</TextCostumization></Text>
             <TextInput
               style={styles.input}
@@ -210,227 +219,213 @@ export default function Formnovo() {
   );
 }
 
-  const styles = StyleSheet.create({
-    container: {
-      flexGrow: 1,
-      paddingVertical: 19,
-      alignItems: 'center',
-      minWidth: 1100,
-    },
-    formWrapper: {
-      backgroundColor: '#fff',
-      borderRadius: 8,
-      width: '97%',
-      maxWidth: 1100,
-      padding: 24,
-      shadowColor: '#000',
-      shadowOffset: { width: 2, height: 3 },
-      shadowOpacity: 0.15,
-      shadowRadius: 8,
-      borderWidth: 1,
-      borderColor: '#bdbdbd',
-      marginBottom: 30,
-    },
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-end',
-      marginBottom: 18,
-      flexWrap: 'wrap',
-    },
-    // Primeira linha: 3 campos iguais
-    inputColNome:{
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    inputColSobrenome:{
-      flexBasis: '38%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    inputColTelefone: {
-      minWidth: 175,
-      maxWidth: 175,
-      marginRight: 0,
-      alignItems: 'flex-start',
-    },
-      // Segunda linha: E-mail (maior), CPF (menor)
-    inputColEmail: {
-      flexBasis: '65%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-
-    inputColCpf:{
-      flexBasis: '35%',
-      minWidth: 175,
-      maxWidth: 175,
-      marginRight: 0,
-      alignItems: 'flex-start',
-    },
-    inputColCep: {
-      flexBasis: '100%',
-      minWidth: 100,
-      maxWidth: 140,
-      marginRight: 0,
-      alignItems: 'flex-start',
-      marginLeft: 18,
-    },
-      // Terceira linha: Endereço (maior), Número (menor), Bairro (maior), CEP (menor)
-    inputColEndereco: {
-      flexBasis: '38%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    inputColNumero: {
-      flexBasis: '15%',
-      minWidth: 80,
-      maxWidth: 110,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    inputColBairro: {
-      flexBasis: '27%',
-      minWidth: 150,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-
-    // Quarta linha: Cidade (maior), UF (menor)
-    inputColUf: {
-      flexBasis: '25%',
-      minWidth: 80,
-      maxWidth: 110,
-      marginRight: 0,
-      alignItems: 'flex-start',
-    },
-        inputColCidade: {
-      flexBasis: '70%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    // Quinta linha: Senha (maior), Confirmar Senha (maior), Botão (menor)
-    inputColSenha: {
-      flexBasis: '40%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    inputColConfirmarSenha: {
-      flexBasis: '40%',
-      minWidth: 200,
-      maxWidth: 200,
-      marginRight: 18,
-      alignItems: 'flex-start',
-    },
-    buttonCol: {
-      minWidth: 10,
-      maxWidth: 10,
-      alignSelf: 'center',
-      alignItems: 'center',
-      height: 55,
-      marginLeft: 100,
-      marginTop: 20,
-    },
-
-    label: {
-      marginBottom: 4,
-      fontWeight: '500',
-      fontSize: 13,
-      color: '#222',
-    },
-    input: {
-      width: '100%',
-      paddingVertical: 12,
-      paddingHorizontal: 14,
-      borderWidth: 1.5,
-      borderColor: '#bdbdbd',
-      borderRadius: 7,
-      fontSize: 20,
-      fontWeight: '700',
-      backgroundColor: '#fff',
-      marginBottom: 0,
-      ...Platform.select({
-        ios: {
-          shadowColor: '#000',
-          shadowOffset: { width: 2, height: 3 },
-          shadowOpacity: 0.13,
-          shadowRadius: 6,
-        },
-        android: {
-          elevation: 5,
-        },
-      }),
-    },
-    button: {
-      backgroundColor: '#006494',
-      borderRadius: 6,
-      height: 55,
-      marginTop: 0,
-      borderWidth: 2,
-      borderColor: '#fff',
-      fontSize: 2,
-      width: 150,
-      justifyContent: 'center',
-      ...Platform.select({
-        ios: {
-          shadowColor: '#000',
-          shadowOffset: { width: 1, height: 2 },
-          shadowOpacity: 0.13,
-          shadowRadius: 6,
-        },
-        android: {
-          elevation: 5,
-        },
-      }),
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 15,
-      fontWeight: '500',
-      textAlign: 'center',
-      padding: 0,
-      width: '100%',
-    },
-    pickerWrapper: {
-      width: '100%',
-      borderWidth: 1.5,
-      borderColor: '#bdbdbd',
-      borderRadius: 7,
-      backgroundColor: '#fff',
-      overflow: 'hidden',
-      ...Platform.select({
-        ios: {
-          shadowColor: '#000',
-          shadowOffset: { width: 2, height: 3 },
-          shadowOpacity: 0.13,
-          shadowRadius: 6,
-        },
-        android: {
-          elevation: 5,
-        },
-      }),
-    },
-    picker: {
-      width: '100%',
-      height: 48,
-      color: '#222',
-      fontSize: 20,
-      fontWeight: '700',
-      backgroundColor: 'transparent',
-    },
-  });
-
-
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingVertical: 24,
+    alignItems: 'center',
+    minWidth: 1000
+  },
+  formWrapper: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    width: '97%',
+    maxWidth: 1100,
+    padding: 24,
+    paddingLeft: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: '#bdbdbd',
+    marginBottom: 30
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    marginBottom: 18,
+    flexWrap: 'wrap'
+  },
+  inputColNome:{
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColSobrenome:{
+    flexBasis: '38%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColTelefone: {
+    minWidth: 250,
+    maxWidth: 250,
+    marginRight: 0,
+    alignItems: 'flex-start'
+  },
+  inputColEmail: {
+    flexBasis: '65%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColCpf:{
+    flexBasis: '35%',
+    minWidth: 200,
+    maxWidth: 200,
+    marginRight: 0,
+    alignItems: 'flex-start'
+  },
+  inputColCep: {
+    flexBasis: '100%',
+    minWidth: 170,
+    maxWidth: 170,
+    marginRight: 0,
+    alignItems: 'flex-start',
+    marginLeft: 18
+  },
+  inputColEndereco: {
+    flexBasis: '38%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColNumero: {
+    flexBasis: '15%',
+    minWidth: 90,
+    maxWidth: 90,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColBairro: {
+    flexBasis: '27%',
+    minWidth: 200,
+    maxWidth: 200,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColUf: {
+    flexBasis: '25%',
+    minWidth: 80,
+    maxWidth: 80,
+    marginRight: 0,
+    alignItems: 'flex-start'
+  },
+  inputColCidade: {
+    flexBasis: '70%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColSenha: {
+    flexBasis: '40%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  inputColConfirmarSenha: {
+    flexBasis: '40%',
+    minWidth: 300,
+    maxWidth: 300,
+    marginRight: 18,
+    alignItems: 'flex-start'
+  },
+  buttonCol: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    height: 55,
+    marginTop: 20,
+    marginLeft: 70,
+  },
+  label: {
+    marginBottom: 6,
+    fontWeight: '600',
+    fontSize: 18,
+    color: '#222'
+  },
+  input: {
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderWidth: 1.5,
+    borderColor: '#bdbdbd',
+    borderRadius: 7,
+    fontSize: 22,
+    fontWeight: '700',
+    backgroundColor: '#fff',
+    marginBottom: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 3 },
+        shadowOpacity: 0.13,
+        shadowRadius: 6
+      },
+      android: {
+        elevation: 5
+      }
+    })
+  },
+  button: {
+    backgroundColor: '#006494',
+    borderRadius: 6,
+    height: 60,
+    borderWidth: 2,
+    borderColor: '#fff',
+    width: 180,
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 2 },
+        shadowOpacity: 0.13,
+        shadowRadius: 6
+      },
+      android: {
+        elevation: 5
+      }
+    })
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    width: '100%'
+  },
+  pickerWrapper: {
+    width: '100%',
+    borderWidth: 1.5,
+    borderColor: '#bdbdbd',
+    borderRadius: 7,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 3 },
+        shadowOpacity: 0.13,
+        shadowRadius: 6
+      },
+      android: {
+        elevation: 5
+      }
+    })
+  },
+  picker: {
+    width: '100%',
+    height: 52,
+    color: '#222',
+    fontSize: 22,
+    fontWeight: '700',
+    backgroundColor: 'transparent'
+  }
+});
