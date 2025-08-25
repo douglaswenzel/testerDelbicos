@@ -51,11 +51,12 @@ const sidebarStyle: React.CSSProperties = {
 const mainContentStyle: React.CSSProperties = {
   flex: 1,
   display: 'flex',
-  backgroundColor: 'black',
   flexDirection: 'column',
-  background: 'transparent',
+  background: 'black',
+  backgroundColor: 'transparent',
+  width: 1100,
   alignItems: 'center',
-  justifyContent: 'flex-start',
+  justifyContent: 'center',
 };
 const contentStyle: React.CSSProperties = {
   fontSize: 18,
