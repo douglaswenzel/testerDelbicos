@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   avatarOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 79,
     alignItems: 'center',
     justifyContent: 'center',
@@ -377,8 +377,8 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   editButton: {
-    padding: 8,
-    marginLeft: 12,
+    padding: 1,
+    marginTop: -45
   },
   editIconImage: {
     width: 20,
