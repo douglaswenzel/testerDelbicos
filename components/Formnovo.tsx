@@ -226,8 +226,7 @@ export default function Formnovo() {
     formWrapper: {
       backgroundColor: '#fff',
       borderRadius: 8,
-      width: '97%',
-      maxWidth: 1100,
+      width: 1000,
       padding: 24,
       shadowColor: '#000',
       shadowOffset: { width: 2, height: 3 },
