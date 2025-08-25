@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import TextCostumization from './TextCostumization';
-import Formnovo from './Formnovo';
 
 type MenuNavegacaoProps = {
   onItemSelected?: (screen: string) => void;
@@ -49,7 +48,7 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     width: 259,
     height: 41,
     borderRadius: 20,
-    marginBottom: 10,
+    marginBottom: 17,
     display: 'flex',
     alignItems: 'center',
     paddingLeft: 15,
