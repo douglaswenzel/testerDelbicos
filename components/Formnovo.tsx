@@ -192,7 +192,7 @@ export default function Formnovo() {
               style={styles.input}
               value={form.senha}
               onChangeText={text => handleChange("senha", text)}
-              placeholder="Senha"
+              placeholder="*"
               placeholderTextColor="#aaa"
               secureTextEntry
             />
@@ -203,7 +203,7 @@ export default function Formnovo() {
               style={styles.input}
               value={form.confirmarSenha}
               onChangeText={text => handleChange("confirmarSenha", text)}
-              placeholder="Confirmar Senha"
+              placeholder="*"
               placeholderTextColor="#aaa"
               secureTextEntry
             />
@@ -234,7 +234,10 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingLeft: 40,
     shadowColor: '#000',
-    shadowOffset: { width: 2, height: 3 },
+    shadowOffset: {
+      width: 2,
+      height: 3
+    },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     borderWidth: 1,
@@ -248,13 +251,13 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     flexWrap: 'wrap'
   },
-  inputColNome:{
+  inputColNome: {
     minWidth: 300,
     maxWidth: 300,
     marginRight: 18,
     alignItems: 'flex-start'
   },
-  inputColSobrenome:{
+  inputColSobrenome: {
     flexBasis: '38%',
     minWidth: 300,
     maxWidth: 300,
@@ -274,7 +277,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
     alignItems: 'flex-start'
   },
-  inputColCpf:{
+  inputColCpf: {
     flexBasis: '35%',
     minWidth: 200,
     maxWidth: 200,
@@ -341,14 +344,15 @@ const styles = StyleSheet.create({
   buttonCol: {
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
-    height: 55,
+    height: 60,
     marginTop: 20,
-    marginLeft: 70,
+    marginLeft: 75, // reduzido para caber na linha
+    minWidth: 130 // largura mínima para não quebrar
   },
   label: {
     marginBottom: 6,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 22,
     color: '#222'
   },
   input: {
@@ -365,7 +369,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 2, height: 3 },
+        shadowOffset: {
+          width: 2,
+          height: 3
+        },
         shadowOpacity: 0.13,
         shadowRadius: 6
       },
@@ -376,7 +383,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#006494',
-    borderRadius: 6,
+    borderRadius: 20,
     height: 60,
     borderWidth: 2,
     borderColor: '#fff',
@@ -385,7 +392,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 1, height: 2 },
+        shadowOffset: {
+          width: 1,
+          height: 2
+        },
         shadowOpacity: 0.13,
         shadowRadius: 6
       },
@@ -396,7 +406,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     textAlign: 'center',
     width: '100%'
@@ -411,7 +421,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 2, height: 3 },
+        shadowOffset: {
+          width: 2,
+          height: 3
+        },
         shadowOpacity: 0.13,
         shadowRadius: 6
       },
