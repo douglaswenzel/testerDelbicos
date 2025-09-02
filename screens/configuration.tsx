@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import MenuNavegacao from '../components/MenuNavegacao';
 import UserProfile from '../components/UserProfile';
+import AltEndereco from '../components/AltEndereco';
 import Formnovo from '../components/Formnovo';
 
 
@@ -11,7 +12,7 @@ const Configuration = () => {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'DadosConta':
-        return <Formnovo />;
+        return <AltEndereco />;
       case 'MeusAgendamentos':
         return <div style={contentStyle}>Conteúdo de Meus Agendamentos</div>;
       default:
@@ -50,8 +51,8 @@ const sidebarStyle: React.CSSProperties = {
 };
 const mainContentStyle: React.CSSProperties = {
   flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
+  // display: 'flex',
+  // flexDirection: 'column',
   background: 'black',
   backgroundColor: 'transparent',
   width: 1100,
@@ -66,7 +67,8 @@ const contentStyle: React.CSSProperties = {
 
 const secondSection: React.CSSProperties = {
   flexDirection: 'row',
-  display: 'flex'
+  display: 'flex',
+  width: '100%',
 }
 
 export default Configuration;
