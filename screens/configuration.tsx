@@ -23,7 +23,7 @@ const Configuration = () => {
   return (
     <div style={containerStyle}>
       <div style={sidebarStyle}>
-        <UserProfile />
+        <UserProfile userId='1' />
       </div>
       <div style ={secondSection}>
         <MenuNavegacao initialActive = {currentScreen} onItemSelected={setCurrentScreen} />
@@ -35,7 +35,6 @@ const Configuration = () => {
   );
 };
 
-// Estilos web
 const containerStyle: React.CSSProperties = {
   display: 'flex',
   background: '#dde6f0',
@@ -51,8 +50,6 @@ const sidebarStyle: React.CSSProperties = {
 };
 const mainContentStyle: React.CSSProperties = {
   flex: 1,
-  // display: 'flex',
-  // flexDirection: 'column',
   background: 'black',
   backgroundColor: 'transparent',
   width: 1100,
