@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Configuration from './screens/configuration';
 import AltEnderco from './components/AltEndereco';
+import UserProfileScreen from './screens/UserProfileScreen';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Configuration /> 
+      <UserProfileScreen /> 
     </View>
   );
 }

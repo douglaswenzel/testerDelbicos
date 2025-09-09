@@ -23,6 +23,7 @@ interface UserProfileProps {
   address?: string;
   avatarSource?: ImageSourcePropType;
   logoSource?: ImageSourcePropType;
+  userId: string;
   onEditPress?: () => void;
   onAvatarChange?: (newAvatar: string) => void;
   onTakePhoto?: () => void;
@@ -557,7 +558,7 @@ const styles = StyleSheet.create({
   optionButton: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+    borderBottomColor: 'rgba(0, 0, 0, 0.12)',
   },
   optionText: {
     fontSize: 16,
