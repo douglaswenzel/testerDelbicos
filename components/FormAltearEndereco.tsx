@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 24,
     borderWidth: 2,
-    borderColor: "#3399ff",
+    borderColor: "#3399ff30", // os dois últimos dígitos (80) representam a opacidade em hex (~50%)
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
 
   },
+
 
   formContainer: {
     flexDirection: 'row',

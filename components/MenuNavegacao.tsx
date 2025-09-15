@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import TextCostumization from './TextCostumization';
 
+
 type MenuNavegacaoProps = {
   onItemSelected?: (screen: string) => void;
   initialActive?: string;
@@ -26,7 +27,7 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
   }, [initialActive]);
 
   const menuItems: MenuItem[] = [
-    { id: 1, title: 'Conta', screen: 'DadosConta' },
+    { id: 1, title: 'Conta', screen: 'dadosContaForm' },
     { id: 2, title: 'Endereços', screen: 'MeusEnderecos' },
     { id: 3, title: 'Segurança', screen: 'Seguranca' },
     { id: 4, title: 'Agendamentos', screen: 'MeusAgendamentos' },
@@ -52,7 +53,7 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     maxWidth: '100%',
   };
   const menuItem: React.CSSProperties = {
-    width: 259,
+    width: "90%",
     height: 41,
     borderRadius: 20,
     marginBottom: 17,
