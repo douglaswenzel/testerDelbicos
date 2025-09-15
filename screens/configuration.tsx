@@ -22,7 +22,7 @@ const Configuration = () => {
     <ScrollView style={styles.container}>
       {/* Cabeçalho superior (se houver) */}
       <View style={styles.header}>
-        <UserProfile />
+        <UserProfile userId='1' />
       </View>
 
       {/* Wrapper principal que contém o menu lateral e o conteúdo */}
