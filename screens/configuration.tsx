@@ -7,11 +7,11 @@ import Formnovo from '../components/Formnovo';
 
 
 const Configuration = () => {
-  const [currentScreen, setCurrentScreen] = useState('DadosConta');
+  const [currentScreen, setCurrentScreen] = useState('MeusEnderecos');
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'DadosConta':
+      case 'MeusEnderecos':
         return <AltEndereco />;
       case 'MeusAgendamentos':
         return <div style={contentStyle}>Conteúdo de Meus Agendamentos</div>;
@@ -40,8 +40,10 @@ const containerStyle: React.CSSProperties = {
   display: 'flex',
   background: '#dde6f0',
   flexDirection: 'column',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItems: 'flex-start',
+  minHeight: '100vh',
+  overflowY: 'auto',
 };
 const sidebarStyle: React.CSSProperties = {
   display: 'flex',
@@ -51,13 +53,13 @@ const sidebarStyle: React.CSSProperties = {
 };
 const mainContentStyle: React.CSSProperties = {
   flex: 1,
-  // display: 'flex',
-  // flexDirection: 'column',
-  background: 'black',
   backgroundColor: 'transparent',
-  width: 1100,
-  alignItems: 'center',
-  justifyContent: 'center',
+  width: '100%',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  display: 'flex',
+  flexDirection: 'column',
+  paddingTop: 16,
 };
 const contentStyle: React.CSSProperties = {
   fontSize: 18,
@@ -70,5 +72,6 @@ const secondSection: React.CSSProperties = {
   display: 'flex',
   width: '100%',
 }
+
 
 export default Configuration;

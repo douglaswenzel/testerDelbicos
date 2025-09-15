@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextCostumization from './TextCostumization';
 
 type MenuNavegacaoProps = {
@@ -19,17 +19,24 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
   initialActive = 'DadosConta',
 }) => {
   const [activeItem, setActiveItem] = useState(initialActive);
+  
+  // Sincroniza quando a tela ativa fornecida pelo pai mudar
+  useEffect(() => {
+    setActiveItem(initialActive);
+  }, [initialActive]);
 
   const menuItems: MenuItem[] = [
-    { id: 1, title: 'Dados da Conta', screen: 'DadosConta' },
-    { id: 2, title: 'Meus Agendamentos', screen: 'MeusAgendamentos' },
-    { id: 3, title: 'Notificações', screen: 'Notificacoes' },
-    { id: 4, title: 'Conversas', screen: 'Conversas' },
-    { id: 5, title: 'Favoritos', screen: 'Favoritos' },
-    { id: 6, title: 'Avaliações', screen: 'Avaliacoes' },
-    { id: 7, title: 'Histórico', screen: 'Historico' },
-    { id: 8, title: 'Pagamentos', screen: 'Pagamentos' },
-    { id: 9, title: 'Ajuda', screen: 'Ajuda' },
+    { id: 1, title: 'Conta', screen: 'DadosConta' },
+    { id: 2, title: 'Endereços', screen: 'MeusEnderecos' },
+    { id: 3, title: 'Segurança', screen: 'Seguranca' },
+    { id: 4, title: 'Agendamentos', screen: 'MeusAgendamentos' },
+    { id: 5, title: 'Notificações', screen: 'Notificacoes' },
+    { id: 6, title: 'Conversas', screen: 'Conversas' },
+    { id: 7, title: 'Favoritos', screen: 'Favoritos' },
+    { id: 8, title: 'Avaliações', screen: 'Avaliacoes' },
+    { id: 9, title: 'Histórico', screen: 'Historico' },
+    { id: 10, title: 'Pagamentos', screen: 'Pagamentos' },
+    { id: 11, title: 'Ajuda', screen: 'Ajuda' },
   ];
 
   const handlePress = (screen: string) => {
@@ -57,16 +64,17 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     border: 'none',
     background: 'none',
   };
+  // Inativo: neutro claro; Ativo: laranja (mock)
   const activeMenuItem: React.CSSProperties = {
-    backgroundColor: '#005A93',
+    backgroundColor: '#FC8200',
   };
   const inactiveMenuItem: React.CSSProperties = {
-    backgroundColor: '#FC8200',
+    backgroundColor: '#e8eef5',
   };
   const menuText: React.CSSProperties = {
     fontSize: 23,
     fontWeight: 400,
-    color: '#000',
+    color: '#222',
   };
   const activeMenuText: React.CSSProperties = {
     color: '#fff',
