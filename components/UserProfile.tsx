@@ -18,7 +18,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 const EditIcon = require("../assets/edit.png");
 
-interface UserProfileProps {
+export interface UserProfileProps {
   userName?: string;
   address?: string;
   avatarSource?: ImageSourcePropType;

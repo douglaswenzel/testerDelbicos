@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 
 import MenuNavegacao from '../components/MenuNavegacao';
-import UserProfile from '../components/UserProfile';
+import UserProfile, { UserProfileProps } from '../components/UserProfile';
 import AltEndereco from '../components/FormAltearEndereco';
 
-const Configuration = () => {
+interface ConfigurationProps {
+  user: UserProfileProps
+}
+
+const Configuration = ({user}: ConfigurationProps) => {
   const [currentScreen, setCurrentScreen] = useState('MeusEnderecos');
 
   const renderScreen = () => {
@@ -22,7 +26,7 @@ const Configuration = () => {
     <ScrollView style={styles.container}>
       {/* Cabeçalho superior (se houver) */}
       <View style={styles.header}>
-        <UserProfile userId='1' />
+        <UserProfile {...user} />
       </View>
 
       {/* Wrapper principal que contém o menu lateral e o conteúdo */}

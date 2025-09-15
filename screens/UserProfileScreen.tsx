@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Alert } from 'react-native';
-import UserProfile from '../components/UserProfile';
+import Configuration from './configuration';
 interface User {
   id: number;
   name: string;
@@ -22,7 +22,7 @@ const UserProfileScreen: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/user/${userId}`);
+        const response = await fetch(`http://localhost:3000/api/clients/${userId}`);
         if (!response.ok) {
           throw new Error('Erro ao buscar usuário');
         }
@@ -49,16 +49,17 @@ const UserProfileScreen: React.FC = () => {
   }
 
   if (!userData) {
-    return null; 
+    return null;
   }
 
   return (
-    <UserProfile
-      userId={String(userData.id)}
-      userName={userData.name}
-      avatarSource={{ uri: userData.avatarImg }}
+    <Configuration 
+      user={{ 
+        userId: String(userData.id), 
+        userName: userData.name, 
+        avatarSource: { uri: userData.avatarImg } }} 
     />
-  );
+  )
 };
 
 export default UserProfileScreen;
