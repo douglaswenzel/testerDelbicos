@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 
 import MenuNavegacao from '../components/MenuNavegacao';
 import UserProfile from '../components/UserProfile';
-import AltEndereco from '../components/FormAltearEndereco';
+import AltEndereco from '../components/AlterarEnderecoForm';
 
 const Configuration = () => {
   const [currentScreen, setCurrentScreen] = useState('MeusEnderecos');
