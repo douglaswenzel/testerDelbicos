@@ -217,6 +217,8 @@ export default function DadosContaForm() {
           </View>
         </View>
       </View>
+      <View style={{ flexGrow: 1 }} />
+      <Text style={{ fontSize: 13, color: '#1877c9', marginTop: 30, alignSelf: 'center', fontWeight: '500' }}>© DelBicos - 2025 - Todos os direitos reservados.</Text>
     </View>
   );
 }

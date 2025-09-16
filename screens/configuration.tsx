@@ -5,6 +5,7 @@ import MenuNavegacao from '../components/MenuNavegacao';
 // import UserProfile, { UserProfileProps } from '../components/UserProfile';
 import AlterarEnderecoForm from '../components/AlterarEnderecoForm';
 import DadosContaForm from '../components/DadosContaForm';
+import TrocarSenhaForm from '../components/TrocarSenhaForm';
 
 
 
@@ -17,6 +18,8 @@ const Configuration = () => {
         return <AlterarEnderecoForm />;
       case 'DadosContaForm':
         return <DadosContaForm/>;
+      case 'TrocarSenhaForm':
+        return <TrocarSenhaForm />;
       default:
         return <Text style={styles.contentText}>Selecione uma opção no menu</Text>;
     }
