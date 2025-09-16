@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 
 import MenuNavegacao from '../components/MenuNavegacao';
 import UserProfile, { UserProfileProps } from '../components/UserProfile';
-import AltEndereco from '../components/FormAltearEndereco';
+import AlterarEnderecoForm from '../components/AlterarEnderecoForm';
 
 interface ConfigurationProps {
   user: UserProfileProps
@@ -15,7 +15,7 @@ const Configuration = ({user}: ConfigurationProps) => {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'MeusEnderecos':
-        return <AltEndereco />;
+        return <AlterarEnderecoForm />;
 
       default:
         return <Text style={styles.contentText}>Selecione uma opção no menu</Text>;

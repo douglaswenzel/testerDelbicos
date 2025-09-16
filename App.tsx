@@ -1,5 +1,7 @@
-import { StyleSheet, View } from 'react-native';
 import UserProfileScreen from './screens/UserProfileScreen';
+import { StyleSheet, View } from 'react-native';
+
+
 
 export default function App() {
   return (
