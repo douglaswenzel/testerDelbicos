@@ -29,7 +29,7 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
   const menuItems: MenuItem[] = [
     { id: 1, title: 'Conta', screen: 'DadosContaForm' },
     { id: 2, title: 'Endereços', screen: 'MeusEnderecos' },
-    { id: 3, title: 'Segurança', screen: 'Seguranca' },
+    { id: 3, title: 'Segurança', screen: 'TrocarSenhaForm' },
     { id: 4, title: 'Agendamentos', screen: 'MeusAgendamentos' },
     { id: 5, title: 'Notificações', screen: 'Notificacoes' },
     { id: 6, title: 'Conversas', screen: 'Conversas' },

@@ -19,212 +19,217 @@ export default function EnderecoForm() {
   const [cidade2, setCidade2] = useState("São Paulo");
 
   return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={styles.page}
-      showsVerticalScrollIndicator
-      keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Text style={styles.pageTitle}>Meus Endereços</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.page}
+        showsVerticalScrollIndicator
+        keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.pageTitle}>Meus Endereços</Text>
 
-      {/* Card 1 */}
-      <View style={styles.card}>
-        <View style={styles.formContainer}>
-          {/* Coluna esquerda: CEP, Número, UF */}
-          <View style={styles.leftColumn}>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>CEP</Text>
-              <TextInput
-                style={styles.cepInput}
-                value={cep}
-                onChangeText={setCep}
-              />
-            </View>
+        <View>
+          {/* Card 1 */}
+          <View style={styles.card}>
+            <View style={styles.formContainer}>
+              {/* Coluna esquerda: CEP, Número, UF */}
+              <View style={styles.leftColumn}>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>CEP</Text>
+                  <TextInput
+                    style={styles.cepInput}
+                    value={cep}
+                    onChangeText={setCep}
+                  />
+                </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Número</Text>
-              <TextInput
-                style={styles.numeroInput}
-                value={numero}
-                onChangeText={setNumero}
-                keyboardType="numeric"
-              />
-            </View>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Número</Text>
+                  <TextInput
+                    style={styles.numeroInput}
+                    value={numero}
+                    onChangeText={setNumero}
+                    keyboardType="numeric"
+                  />
+                </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>UF</Text>
-              <View style={styles.ufInput}>
-                <Picker
-                  selectedValue={uf}
-                  onValueChange={(itemValue) => setUf(itemValue as string)}
-                  style={styles.picker}
-                >
-                  {[
-                    "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT",
-                    "MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO",
-                    "RR","SC","SP","SE","TO"
-                  ].map((sigla) => (
-                    <Picker.Item key={sigla} label={sigla} value={sigla} />
-                  ))}
-                </Picker>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>UF</Text>
+                  <View style={styles.ufInput}>
+                    <Picker
+                      selectedValue={uf}
+                      onValueChange={(itemValue) => setUf(itemValue as string)}
+                      style={styles.picker}
+                    >
+                      {[
+                        "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT",
+                        "MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO",
+                        "RR","SC","SP","SE","TO"
+                      ].map((sigla) => (
+                        <Picker.Item key={sigla} label={sigla} value={sigla} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+              </View>
+
+              {/* Coluna direita: Endereço, Bairro, Cidade */}
+              <View style={styles.rightColumn}>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Endereço</Text>
+                  <TextInput
+                    style={styles.enderecoInput}
+                    value={endereco}
+                    onChangeText={setEndereco}
+                  />
+                </View>
+
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Bairro</Text>
+                  <TextInput
+                    style={styles.bairroInput}
+                    value={bairro}
+                    onChangeText={setBairro}
+                  />
+                </View>
+
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Cidade</Text>
+                  <TextInput
+                    style={styles.cidadeInput}
+                    value={cidade}
+                    onChangeText={setCidade}
+                  />
+                </View>
               </View>
             </View>
-          </View>
 
-          {/* Coluna direita: Endereço, Bairro, Cidade */}
-          <View style={styles.rightColumn}>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Endereço</Text>
-              <TextInput
-                style={styles.enderecoInput}
-                value={endereco}
-                onChangeText={setEndereco}
-              />
+            {/* Ações à direita */}
+            <View style={styles.actionsRow}>
+              <TouchableOpacity>
+                <FontAwesome name="star-o" size={20} color="#0066cc" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="pencil" size={20} color="#ff6600" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="trash-o" size={20} color="#999" />
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Bairro</Text>
-              <TextInput
-                style={styles.bairroInput}
-                value={bairro}
-                onChangeText={setBairro}
-              />
-            </View>
-
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Cidade</Text>
-              <TextInput
-                style={styles.cidadeInput}
-                value={cidade}
-                onChangeText={setCidade}
-              />
+            {/* Botão Salvar à direita */}
+            <View style={styles.saveRow}>
+              <TouchableOpacity style={styles.saveButton}>
+                <Text style={styles.saveButtonText}>Salvar Alterações</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
 
-        {/* Ações à direita */}
-        <View style={styles.actionsRow}>
-          <TouchableOpacity>
-            <FontAwesome name="star-o" size={20} color="#0066cc" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome name="pencil" size={20} color="#ff6600" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome name="trash-o" size={20} color="#999" />
-          </TouchableOpacity>
-        </View>
+          {/* Card 2 (duplicado) */}
+          <View style={styles.card}>
+            <View style={styles.formContainer}>
+              {/* Coluna esquerda: CEP, Número, UF */}
+              <View style={styles.leftColumn}>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>CEP</Text>
+                  <TextInput
+                    style={styles.cepInput}
+                    value={cep2}
+                    onChangeText={setCep2}
+                  />
+                </View>
 
-        {/* Botão Salvar à direita */}
-        <View style={styles.saveRow}>
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Salvar Alterações</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Número</Text>
+                  <TextInput
+                    style={styles.numeroInput}
+                    value={numero2}
+                    onChangeText={setNumero2}
+                    keyboardType="numeric"
+                  />
+                </View>
 
-      {/* Card 2 (duplicado) */}
-      <View style={styles.card}>
-        <View style={styles.formContainer}>
-          {/* Coluna esquerda: CEP, Número, UF */}
-          <View style={styles.leftColumn}>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>CEP</Text>
-              <TextInput
-                style={styles.cepInput}
-                value={cep2}
-                onChangeText={setCep2}
-              />
-            </View>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>UF</Text>
+                  <View style={styles.ufInput}>
+                    <Picker
+                      selectedValue={uf2}
+                      onValueChange={(itemValue) => setUf2(itemValue as string)}
+                      style={styles.picker}
+                    >
+                      {[
+                        "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT",
+                        "MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO",
+                        "RR","SC","SP","SE","TO"
+                      ].map((sigla) => (
+                        <Picker.Item key={sigla} label={sigla} value={sigla} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+              </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Número</Text>
-              <TextInput
-                style={styles.numeroInput}
-                value={numero2}
-                onChangeText={setNumero2}
-                keyboardType="numeric"
-              />
-            </View>
+              {/* Coluna direita: Endereço, Bairro, Cidade */}
+              <View style={styles.rightColumn}>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Endereço</Text>
+                  <TextInput
+                    style={styles.enderecoInput}
+                    value={endereco2}
+                    onChangeText={setEndereco2}
+                  />
+                </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>UF</Text>
-              <View style={styles.ufInput}>
-                <Picker
-                  selectedValue={uf2}
-                  onValueChange={(itemValue) => setUf2(itemValue as string)}
-                  style={styles.picker}
-                >
-                  {[
-                    "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT",
-                    "MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO",
-                    "RR","SC","SP","SE","TO"
-                  ].map((sigla) => (
-                    <Picker.Item key={sigla} label={sigla} value={sigla} />
-                  ))}
-                </Picker>
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Bairro</Text>
+                  <TextInput
+                    style={styles.bairroInput}
+                    value={bairro2}
+                    onChangeText={setBairro2}
+                  />
+                </View>
+
+                <View style={styles.inputWrapper}>
+                  <Text style={styles.label}>Cidade</Text>
+                  <TextInput
+                    style={styles.cidadeInput}
+                    value={cidade2}
+                    onChangeText={setCidade2}
+                  />
+                </View>
               </View>
             </View>
-          </View>
 
-          {/* Coluna direita: Endereço, Bairro, Cidade */}
-          <View style={styles.rightColumn}>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Endereço</Text>
-              <TextInput
-                style={styles.enderecoInput}
-                value={endereco2}
-                onChangeText={setEndereco2}
-              />
+            {/* Ações à direita */}
+            <View style={styles.actionsRow}>
+              <TouchableOpacity>
+                <FontAwesome name="star-o" size={20} color="#0066cc" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="pencil" size={20} color="#ff6600" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="trash-o" size={20} color="#999" />
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Bairro</Text>
-              <TextInput
-                style={styles.bairroInput}
-                value={bairro2}
-                onChangeText={setBairro2}
-              />
-            </View>
-
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Cidade</Text>
-              <TextInput
-                style={styles.cidadeInput}
-                value={cidade2}
-                onChangeText={setCidade2}
-              />
+            {/* Botão Salvar à direita */}
+            <View style={styles.saveRow}>
+              <TouchableOpacity style={styles.saveButton}>
+                <Text style={styles.saveButtonText}>Salvar Alterações</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
 
-        {/* Ações à direita */}
-        <View style={styles.actionsRow}>
-          <TouchableOpacity>
-            <FontAwesome name="star-o" size={20} color="#0066cc" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome name="pencil" size={20} color="#ff6600" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome name="trash-o" size={20} color="#999" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Botão Salvar à direita */}
-        <View style={styles.saveRow}>
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Salvar Alterações</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Botão Novo Endereço centralizado */}
-      <TouchableOpacity style={styles.newButton}>
-        <Text style={styles.newButtonText}>+ Novo Endereço</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Botão Novo Endereço centralizado */}
+        <TouchableOpacity style={styles.newButton}>
+          <Text style={styles.newButtonText}>+ Novo Endereço</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <Text style={styles.rodape}>© DelBicos - 2025 - Todos os direitos reservados.</Text>
+    </View>
   );
 }
 
@@ -254,7 +259,6 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    maxWidth: "120%",
     backgroundColor: "#f8fafd",
     borderRadius: 12,
     padding: 24,
@@ -424,4 +428,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+
+  rodape: {
+		fontSize: 13,
+		color: '#1877c9',
+		marginTop: 30,
+		alignSelf: 'center',
+		fontWeight: '500',
+	},
 });
