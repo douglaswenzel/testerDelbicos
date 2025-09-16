@@ -11,14 +11,19 @@ import {
   Animated,
   Easing,
   Alert,
+  Platform,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
 const EditIcon = require("../assets/edit.png");
 
-interface UserProfileProps {
+export interface UserProfileProps {
   userName?: string;
   address?: string;
   avatarSource?: ImageSourcePropType;
   logoSource?: ImageSourcePropType;
+  userId: string;
   onEditPress?: () => void;
   onAvatarChange?: (newAvatar: string) => void;
   onTakePhoto?: () => void;
@@ -41,6 +46,23 @@ const UserProfile: React.FC<UserProfileProps> = ({
   const [showOptions, setShowOptions] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
   const [overlayOpacity] = useState(new Animated.Value(0));
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    requestPermissions();
+  }, []);
+
+  const requestPermissions = async () => {
+    if (Platform.OS !== 'web') {
+      const { status: cameraStatus } = await Permissions.askAsync(Permissions.CAMERA);
+      const { status: libraryStatus } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+      
+      if (cameraStatus !== 'granted' || libraryStatus !== 'granted') {
+        Alert.alert('Permissões necessárias', 'Precisamos de acesso à câmera e galeria para esta funcionalidade.');
+      }
+    }
+  };
 
   const handleAvatarPress = () => {
     setShowOptions(true);
@@ -101,30 +123,113 @@ const UserProfile: React.FC<UserProfileProps> = ({
     ]).start();
   };
 
-  const handleTakePhoto = () => {
+  const handleTakePhoto = async () => {
     if (onTakePhoto) {
       onTakePhoto();
-    } else {
-      Alert.alert(
-        'Tirar Foto',
-        'Funcionalidade de câmera será implementada aqui.',
-        [{ text: 'OK' }]
-      );
+      setShowOptions(false);
+      return;
     }
-    setShowOptions(false);
+
+    try {
+      setIsLoading(true);
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+        base64: true,
+      });
+
+      console.log('Resultado da câmera:', result);
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const selectedAsset = result.assets[0];
+        await handleImageSelection(selectedAsset);
+      }
+    } catch (error) {
+      console.error('Error taking photo:', error);
+      Alert.alert('Erro', 'Não foi possível acessar a câmera.');
+    } finally {
+      setIsLoading(false);
+      setShowOptions(false);
+    }
   };
 
-  const handlePickFromGallery = () => {
+  const handlePickFromGallery = async () => {
     if (onPickFromGallery) {
       onPickFromGallery();
-    } else {
-      Alert.alert(
-        'Escolher da Galeria',
-        'Funcionalidade de galeria será implementada aqui.',
-        [{ text: 'OK' }]
-      );
+      setShowOptions(false);
+      return;
     }
-    setShowOptions(false);
+
+    try {
+      setIsLoading(true);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+        base64: true,
+      });
+
+      console.log('Resultado da galeria:', result);
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const selectedAsset = result.assets[0];
+        await handleImageSelection(selectedAsset);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Erro', 'Não foi possível acessar a galeria.');
+    } finally {
+      setIsLoading(false);
+      setShowOptions(false);
+    }
+  };
+
+  const handleImageSelection = async (asset: ImagePicker.ImagePickerAsset) => {
+    try {
+      let imageUri = asset.uri;
+
+      console.log('Asset recebido:', asset);
+      console.log('URI original:', asset.uri);
+      console.log('Base64 disponível:', !!asset.base64);
+
+      if (Platform.OS === 'web') {
+        console.log('Plataforma: Web');
+        if (asset.base64) {
+          imageUri = `data:image/jpeg;base64,${asset.base64}`;
+          console.log('URI convertida para base64:', imageUri.substring(0, 50) + '...');
+        } else {
+          console.log('Base64 não disponível, usando URI original');
+        }
+      } else {
+        console.log('Plataforma: Mobile');
+        const fileName = imageUri.split('/').pop();
+        const newPath = `${FileSystem.documentDirectory}${fileName}`;
+        
+        console.log('Copiando arquivo para:', newPath);
+        
+        await FileSystem.copyAsync({
+          from: imageUri,
+          to: newPath,
+        });
+        
+        imageUri = newPath;
+        console.log('Arquivo copiado com sucesso');
+      }
+
+      console.log('Definindo nova imagem:', imageUri);
+      setSelectedAvatar(imageUri);
+      
+      if (onAvatarChange) {
+        onAvatarChange(imageUri);
+      }
+      
+    } catch (error) {
+      console.error('Error processing image:', error);
+      Alert.alert('Erro', 'Não foi possível processar a imagem.');
+    }
   };
 
   const removePhoto = () => {
@@ -140,13 +245,33 @@ const UserProfile: React.FC<UserProfileProps> = ({
           text: 'Remover',
           style: 'destructive',
           onPress: () => {
-            onAvatarChange?.('');
+            setSelectedAvatar(null);
+            if (onAvatarChange) {
+              onAvatarChange('');
+            }
             setShowOptions(false);
           },
         },
       ]
     );
   };
+
+  const getAvatarSource = () => {
+    if (selectedAvatar) {
+      return { uri: selectedAvatar };
+    }
+    
+    if (avatarSource) {
+      if (typeof avatarSource === 'string') {
+        return { uri: avatarSource };
+      }
+      return avatarSource;
+    }
+    
+    return null;
+  };
+
+  const currentAvatarSource = getAvatarSource();
 
   return (
     <View style={[styles.container, style]}>
@@ -160,6 +285,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
             onPressIn={handleHoverIn}
             onPressOut={handleHoverOut}
             activeOpacity={0.9}
+            disabled={isLoading}
           >
             <Animated.View 
               style={[
@@ -167,11 +293,15 @@ const UserProfile: React.FC<UserProfileProps> = ({
                 { transform: [{ scale: scaleAnim }] }
               ]}
             >
-              {avatarSource ? (
+              {currentAvatarSource ? (
                 <Image 
-                  source={avatarSource} 
+                  source={currentAvatarSource} 
                   style={styles.avatarImage}
                   resizeMode="cover"
+                  onError={(e) => {
+                    console.error('Erro ao carregar imagem:', e.nativeEvent.error);
+                    setSelectedAvatar(null);
+                  }}
                 />
               ) : (
                 <View style={styles.avatarPlaceholder}>
@@ -195,7 +325,9 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   { opacity: overlayOpacity }
                 ]}
               >
-                <Text style={styles.overlayText}>Alterar Foto</Text>
+                <Text style={styles.overlayText}>
+                  {isLoading ? 'Carregando...' : 'Alterar Foto'}
+                </Text>
               </Animated.View>
             </Animated.View>
           </TouchableOpacity>
@@ -237,21 +369,28 @@ const UserProfile: React.FC<UserProfileProps> = ({
             <TouchableOpacity 
               style={styles.optionButton}
               onPress={handleTakePhoto}
+              disabled={isLoading}
             >
-              <Text style={styles.optionText}>Tirar Foto</Text>
+              <Text style={styles.optionText}>
+                {isLoading ? 'Processando...' : 'Tirar Foto'}
+              </Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={styles.optionButton}
               onPress={handlePickFromGallery}
+              disabled={isLoading}
             >
-              <Text style={styles.optionText}>Escolher da Galeria</Text>
+              <Text style={styles.optionText}>
+                {isLoading ? 'Processando...' : 'Escolher da Galeria'}
+              </Text>
             </TouchableOpacity>
             
-            {avatarSource && (
+            {(currentAvatarSource || selectedAvatar) && (
               <TouchableOpacity 
                 style={[styles.optionButton, styles.removeOption]}
                 onPress={removePhoto}
+                disabled={isLoading}
               >
                 <Text style={[styles.optionText, styles.removeText]}>Remover Foto</Text>
               </TouchableOpacity>
@@ -260,6 +399,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
             <TouchableOpacity 
               style={[styles.optionButton, styles.cancelOption]}
               onPress={() => setShowOptions(false)}
+              disabled={isLoading}
             >
               <Text style={styles.optionText}>Cancelar</Text>
             </TouchableOpacity>
@@ -322,7 +462,7 @@ const styles = StyleSheet.create({
   },
   avatarOverlay: {
     ...StyleSheet.absoluteFillObject,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 79,
     alignItems: 'center',
     justifyContent: 'center',
@@ -418,7 +558,7 @@ const styles = StyleSheet.create({
   optionButton: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+    borderBottomColor: 'rgba(0, 0, 0, 0.12)',
   },
   optionText: {
     fontSize: 16,

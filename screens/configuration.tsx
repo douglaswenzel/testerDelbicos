@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 
 import MenuNavegacao from '../components/MenuNavegacao';
-import UserProfile from '../components/UserProfile';
-import AltEndereco from '../components/AlterarEnderecoForm';
+import UserProfile, { UserProfileProps } from '../components/UserProfile';
+import AlterarEnderecoForm from '../components/AlterarEnderecoForm';
 
-const Configuration = () => {
+interface ConfigurationProps {
+  user: UserProfileProps
+}
+
+const Configuration = ({user}: ConfigurationProps) => {
   const [currentScreen, setCurrentScreen] = useState('MeusEnderecos');
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'MeusEnderecos':
-        return <AltEndereco />;
+        return <AlterarEnderecoForm />;
 
       default:
         return <Text style={styles.contentText}>Selecione uma opção no menu</Text>;
@@ -22,7 +26,7 @@ const Configuration = () => {
     <ScrollView style={styles.container}>
       {/* Cabeçalho superior (se houver) */}
       <View style={styles.header}>
-        <UserProfile />
+        <UserProfile {...user} />
       </View>
 
       {/* Wrapper principal que contém o menu lateral e o conteúdo */}
