@@ -331,8 +331,6 @@ export default function DadosContaForm({ user }: DadosContaFormProps) {
       </View>
       <View style={{ flexGrow: 1 }} />
       <Text style={{ fontSize: 13, color: '#1877c9', marginTop: 30, alignSelf: 'center', fontWeight: '500' }}>© DelBicos - 2025 - Todos os direitos reservados.</Text>
-
-      {/* Modal de Status de Salvamento */}
       <StatusModal
         visible={showStatusModal}
         status={status}
