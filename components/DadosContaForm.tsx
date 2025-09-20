@@ -16,6 +16,59 @@ interface DadosContaFormProps {
   user?: UserProfileProps;
 }
 
+// Novos tipos para o modal de status
+type ModalStatus = 'success' | 'error' | 'loading' | null;
+
+interface StatusModalProps {
+  visible: boolean;
+  status: ModalStatus;
+  message: string;
+  onClose: () => void;
+}
+
+// Novo componente para o modal de status
+const StatusModal = ({ visible, status, message, onClose }: StatusModalProps) => {
+  const isSuccess = status === 'success';
+  const isError = status === 'error';
+  const isProgress = status === 'loading';
+
+  const getIcon = () => {
+    if (isSuccess) {
+      return '✔️';
+    } else if (isError) {
+      return '❌';
+    }
+    return '⏳';
+  };
+
+  const getTitle = () => {
+    if (isSuccess) {
+      return 'Sucesso!';
+    } else if (isError) {
+      return 'Ops...';
+    }
+    return 'Salvando...';
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={statusModalStyles.overlay}>
+        <View style={statusModalStyles.container}>
+          <Text style={statusModalStyles.icon}>{getIcon()}</Text>
+          <Text style={statusModalStyles.title}>{getTitle()}</Text>
+          <Text style={statusModalStyles.message}>{message}</Text>
+          {isProgress && <ActivityIndicator size="small" color="#005A93" style={statusModalStyles.activityIndicator} />}
+          {!isProgress && (
+            <TouchableOpacity style={statusModalStyles.button} onPress={onClose}>
+              <Text style={statusModalStyles.buttonText}>OK</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 export default function DadosContaForm({ user }: DadosContaFormProps) {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
@@ -26,6 +79,11 @@ export default function DadosContaForm({ user }: DadosContaFormProps) {
   const [showOptions, setShowOptions] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
   const [overlayOpacity] = useState(new Animated.Value(0));
+
+  // Novos estados para o modal de status
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [status, setStatus] = useState<ModalStatus>(null);
+  const [statusMessage, setStatusMessage] = useState('');
 
   useEffect(() => {
     requestPermissions();
@@ -146,8 +204,32 @@ export default function DadosContaForm({ user }: DadosContaFormProps) {
     setShowOptions(false);
   };
 
-  const handleSaveChanges = () => {
-    console.log('Dados Salvos:', { nome, sobrenome, cpf, email, telefone });
+  const handleSaveChanges = async () => {
+    setShowStatusModal(true);
+    setStatus('loading');
+    setStatusMessage('Estamos salvando suas alterações...');
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const success = Math.random() > 0.2;
+      
+      if (success) {
+        console.log('Dados Salvos:', { nome, sobrenome, cpf, email, telefone });
+        setStatus('success');
+        setStatusMessage('Suas informações foram salvas com sucesso!');
+      } else {
+        throw new Error('Falha ao salvar os dados. Tente novamente.');
+      }
+    } catch (error: any) {
+      setStatus('error');
+      setStatusMessage(error.message || 'Ocorreu um erro inesperado. Tente novamente mais tarde.');
+      console.error('Erro ao salvar:', error);
+    }
+  };
+
+  const handleCloseStatusModal = () => {
+    setShowStatusModal(false);
+    setStatus(null);
   };
 
   const avatarUriToDisplay = user?.avatarSource?.uri;
@@ -252,6 +334,14 @@ export default function DadosContaForm({ user }: DadosContaFormProps) {
       </View>
       <View style={{ flexGrow: 1 }} />
       <Text style={{ fontSize: 13, color: '#1877c9', marginTop: 30, alignSelf: 'center', fontWeight: '500' }}>© DelBicos - 2025 - Todos os direitos reservados.</Text>
+
+      {/* Modal de Status de Salvamento */}
+      <StatusModal
+        visible={showStatusModal}
+        status={status}
+        message={statusMessage}
+        onClose={handleCloseStatusModal}
+      />
     </View>
   );
 }
@@ -386,5 +476,66 @@ const modalStyles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: '#F2F2F7',
     borderRadius: 8,
+  },
+});
+
+const statusModalStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 25,
+    borderRadius: 15,
+    alignItems: 'center',
+    width: '80%',
+    maxWidth: 350,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  icon: {
+    fontSize: 50,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#1d2b36',
+  },
+  message: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+    marginBottom: 20,
+  },
+  activityIndicator: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: '#005A93',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
