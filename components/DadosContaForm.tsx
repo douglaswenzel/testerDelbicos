@@ -16,7 +16,6 @@ interface DadosContaFormProps {
   user?: UserProfileProps;
 }
 
-// Novos tipos para o modal de status
 type ModalStatus = 'success' | 'error' | 'loading' | null;
 
 interface StatusModalProps {
@@ -26,7 +25,6 @@ interface StatusModalProps {
   onClose: () => void;
 }
 
-// Novo componente para o modal de status
 const StatusModal = ({ visible, status, message, onClose }: StatusModalProps) => {
   const isSuccess = status === 'success';
   const isError = status === 'error';
@@ -80,7 +78,6 @@ export default function DadosContaForm({ user }: DadosContaFormProps) {
   const [scaleAnim] = useState(new Animated.Value(1));
   const [overlayOpacity] = useState(new Animated.Value(0));
 
-  // Novos estados para o modal de status
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [status, setStatus] = useState<ModalStatus>(null);
   const [statusMessage, setStatusMessage] = useState('');
