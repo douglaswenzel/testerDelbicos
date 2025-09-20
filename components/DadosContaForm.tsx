@@ -1,26 +1,98 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Modal, Image, Alert, Animated, Easing } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Modal, Image, Alert, Animated, Easing, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function DadosContaForm() {
-  const [nome, setNome] = useState('Douglas');
-  const [sobrenome, setSobrenome] = useState('W.');
+interface UserProfileProps {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhone: string;
+  avatarSource: { uri: string | null };
+  onAvatarChange: (base64: string | null) => Promise<void>;
+  uploading?: boolean;
+}
+
+interface DadosContaFormProps {
+  user?: UserProfileProps;
+}
+
+type ModalStatus = 'success' | 'error' | 'loading' | null;
+
+interface StatusModalProps {
+  visible: boolean;
+  status: ModalStatus;
+  message: string;
+  onClose: () => void;
+}
+
+const StatusModal = ({ visible, status, message, onClose }: StatusModalProps) => {
+  const isSuccess = status === 'success';
+  const isError = status === 'error';
+  const isProgress = status === 'loading';
+
+  const getIcon = () => {
+    if (isSuccess) {
+      return '✔️';
+    } else if (isError) {
+      return '❌';
+    }
+    return '⏳';
+  };
+
+  const getTitle = () => {
+    if (isSuccess) {
+      return 'Sucesso!';
+    } else if (isError) {
+      return 'Ops...';
+    }
+    return 'Salvando...';
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={statusModalStyles.overlay}>
+        <View style={statusModalStyles.container}>
+          <Text style={statusModalStyles.icon}>{getIcon()}</Text>
+          <Text style={statusModalStyles.title}>{getTitle()}</Text>
+          <Text style={statusModalStyles.message}>{message}</Text>
+          {isProgress && <ActivityIndicator size="small" color="#005A93" style={statusModalStyles.activityIndicator} />}
+          {!isProgress && (
+            <TouchableOpacity style={statusModalStyles.button} onPress={onClose}>
+              <Text style={statusModalStyles.buttonText}>OK</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+export default function DadosContaForm({ user }: DadosContaFormProps) {
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
   const [cpf, setCpf] = useState('001.112.223-45');
-  const [email, setEmail] = useState('douglasw@gmail.com');
-  const [telefone, setTelefone] = useState('(15) 95147-89530');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
 
-
-  // Avatar state e animação
-  const [avatar, setAvatar] = useState<string | null>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
   const [overlayOpacity] = useState(new Animated.Value(0));
 
-  React.useEffect(() => {
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [status, setStatus] = useState<ModalStatus>(null);
+  const [statusMessage, setStatusMessage] = useState('');
+
+  useEffect(() => {
     requestPermissions();
-  }, []);
+
+    if (user) {
+      const fullNameParts = user.userName.split(' ');
+      setNome(fullNameParts[0] || '');
+      setSobrenome(fullNameParts.slice(1).join(' ') || '');
+      setEmail(user.userEmail || '');
+      setTelefone(user.userPhone || '');
+    }
+  }, [user]);
 
   const requestPermissions = async () => {
     if (Platform.OS !== 'web') {
@@ -34,7 +106,6 @@ export default function DadosContaForm() {
       }
     }
   };
-
 
   const handleAvatarPress = () => setShowOptions(true);
   const handleAvatarLongPress = () => {
@@ -56,9 +127,26 @@ export default function DadosContaForm() {
     ]).start();
   };
 
-  const handleTakePhoto = async () => {
+  const handleImageSelection = async (asset: ImagePicker.ImagePickerAsset) => {
+    if (!asset.base64) {
+      Alert.alert('Erro', 'Imagem não contém dados base64.');
+      return;
+    }
+    const dataUri = `data:image/jpeg;base64,${asset.base64}`;
+
     try {
-      setIsLoading(true);
+      if (user?.onAvatarChange) {
+        await user.onAvatarChange(dataUri);
+      }
+    } catch (error) {
+      console.error('Erro ao processar a imagem:', error);
+      Alert.alert('Erro', 'Não foi possível processar a imagem para upload.');
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    if (user?.uploading) return;
+    try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -72,14 +160,13 @@ export default function DadosContaForm() {
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível acessar a câmera.');
     } finally {
-      setIsLoading(false);
       setShowOptions(false);
     }
   };
 
   const handlePickFromGallery = async () => {
+    if (user?.uploading) return;
     try {
-      setIsLoading(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -93,35 +180,56 @@ export default function DadosContaForm() {
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível acessar a galeria.');
     } finally {
-      setIsLoading(false);
       setShowOptions(false);
     }
   };
 
-  const handleImageSelection = (asset: ImagePicker.ImagePickerAsset) => {
-    if (!asset.base64) {
-      Alert.alert('Erro', 'Imagem não contém dados base64.');
-      return;
-    }
-    const dataUri = `data:image/jpeg;base64,${asset.base64}`;
-    setAvatar(dataUri);
-  };
-
   const removePhoto = () => {
+    if (user?.uploading) return;
     Alert.alert('Remover foto', 'Tem certeza que deseja remover a foto de perfil?', [
       { text: 'Cancelar', style: 'cancel' },
       {
         text: 'Remover',
         style: 'destructive',
-        onPress: () => setAvatar(null),
+        onPress: () => {
+          if (user?.onAvatarChange) {
+            user.onAvatarChange(null);
+          }
+        },
       },
     ]);
     setShowOptions(false);
   };
 
-  const handleSaveChanges = () => {
-    console.log('Dados Salvos:', { nome, sobrenome, cpf, email, telefone });
+  const handleSaveChanges = async () => {
+    setShowStatusModal(true);
+    setStatus('loading');
+    setStatusMessage('Estamos salvando suas alterações...');
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const success = Math.random() > 0.2;
+      
+      if (success) {
+        console.log('Dados Salvos:', { nome, sobrenome, cpf, email, telefone });
+        setStatus('success');
+        setStatusMessage('Suas informações foram salvas com sucesso!');
+      } else {
+        throw new Error('Falha ao salvar os dados. Tente novamente.');
+      }
+    } catch (error: any) {
+      setStatus('error');
+      setStatusMessage(error.message || 'Ocorreu um erro inesperado. Tente novamente mais tarde.');
+      console.error('Erro ao salvar:', error);
+    }
   };
+
+  const handleCloseStatusModal = () => {
+    setShowStatusModal(false);
+    setStatus(null);
+  };
+
+  const avatarUriToDisplay = user?.avatarSource?.uri;
 
   return (
     <View style={styles.formWrapper}>
@@ -136,16 +244,20 @@ export default function DadosContaForm() {
               onPressIn={handleHoverIn}
               onPressOut={handleHoverOut}
               activeOpacity={0.9}
-              disabled={isLoading}
+              disabled={user?.uploading}
             >
               <Animated.View style={{ width: '100%', height: '100%', borderRadius: 60, overflow: 'hidden', backgroundColor: 'orange', alignItems: 'center', justifyContent: 'center', transform: [{ scale: scaleAnim }] }}>
-                {avatar ? (
-                  <Image source={{ uri: avatar }} style={{ width: '100%', height: '100%', borderRadius: 60 }} resizeMode="cover" />
+                {avatarUriToDisplay ? (
+                  <Image source={{ uri: avatarUriToDisplay }} style={{ width: '100%', height: '100%', borderRadius: 60 }} resizeMode="cover" />
                 ) : (
                   <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#fff' }}>{nome[0]}{sobrenome[0]}</Text>
                 )}
                 <Animated.View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 60, alignItems: 'center', justifyContent: 'center', opacity: overlayOpacity }}>
-                  <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', textAlign: 'center' }}>{isLoading ? 'Carregando...' : 'Alterar Foto'}</Text>
+                  {user?.uploading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', textAlign: 'center' }}>Alterar Foto</Text>
+                  )}
                 </Animated.View>
               </Animated.View>
             </TouchableOpacity>
@@ -153,18 +265,18 @@ export default function DadosContaForm() {
               <View style={modalStyles.modalOverlay}>
                 <TouchableOpacity style={{flex:1, position:'absolute', width:'100%', height:'100%'}} activeOpacity={1} onPress={() => setShowOptions(false)} />
                 <View style={modalStyles.optionsContainer}>
-                  <TouchableOpacity style={modalStyles.optionButton} onPress={handleTakePhoto} disabled={isLoading}>
-                    <Text style={modalStyles.optionText}>{isLoading ? 'Processando...' : 'Tirar Foto'}</Text>
+                  <TouchableOpacity style={modalStyles.optionButton} onPress={handleTakePhoto} disabled={user?.uploading}>
+                    <Text style={modalStyles.optionText}>{user?.uploading ? 'Processando...' : 'Tirar Foto'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={modalStyles.optionButton} onPress={handlePickFromGallery} disabled={isLoading}>
-                    <Text style={modalStyles.optionText}>{isLoading ? 'Processando...' : 'Escolher da Galeria'}</Text>
+                  <TouchableOpacity style={modalStyles.optionButton} onPress={handlePickFromGallery} disabled={user?.uploading}>
+                    <Text style={modalStyles.optionText}>{user?.uploading ? 'Processando...' : 'Escolher da Galeria'}</Text>
                   </TouchableOpacity>
-                  {avatar && (
-                    <TouchableOpacity style={[modalStyles.optionButton, modalStyles.removeOption]} onPress={removePhoto} disabled={isLoading}>
+                  {avatarUriToDisplay && (
+                    <TouchableOpacity style={[modalStyles.optionButton, modalStyles.removeOption]} onPress={removePhoto} disabled={user?.uploading}>
                       <Text style={[modalStyles.optionText, modalStyles.removeText]}>Remover Foto</Text>
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity style={[modalStyles.optionButton, modalStyles.cancelOption]} onPress={() => setShowOptions(false)} disabled={isLoading}>
+                  <TouchableOpacity style={[modalStyles.optionButton, modalStyles.cancelOption]} onPress={() => setShowOptions(false)} disabled={user?.uploading}>
                     <Text style={modalStyles.optionText}>Cancelar</Text>
                   </TouchableOpacity>
                 </View>
@@ -219,14 +331,18 @@ export default function DadosContaForm() {
       </View>
       <View style={{ flexGrow: 1 }} />
       <Text style={{ fontSize: 13, color: '#1877c9', marginTop: 30, alignSelf: 'center', fontWeight: '500' }}>© DelBicos - 2025 - Todos os direitos reservados.</Text>
+      <StatusModal
+        visible={showStatusModal}
+        status={status}
+        message={statusMessage}
+        onClose={handleCloseStatusModal}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  formWrapper: {
-    // Flex removido para que o componente ocupe a altura necessária
-  },
+  formWrapper: {},
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -234,7 +350,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   card: {
-    // Flex removido
     backgroundColor: '#f8fafd',
     borderRadius: 12,
     borderWidth: 2,
@@ -319,7 +434,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Modal styles (copiados do UserProfile)
 const modalStyles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
@@ -357,5 +471,66 @@ const modalStyles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: '#F2F2F7',
     borderRadius: 8,
+  },
+});
+
+const statusModalStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 25,
+    borderRadius: 15,
+    alignItems: 'center',
+    width: '80%',
+    maxWidth: 350,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  icon: {
+    fontSize: 50,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#1d2b36',
+  },
+  message: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+    marginBottom: 20,
+  },
+  activityIndicator: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: '#005A93',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
