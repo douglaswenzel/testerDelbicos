@@ -52,25 +52,28 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     margin: '20px 0',
     maxWidth: '100%',
   };
-  const menuItem: React.CSSProperties = {
-    width: "90%",
-    height: 41,
-    borderRadius: 20,
-    marginBottom: 17,
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: 15,
-    cursor: 'pointer',
-    userSelect: 'none',
-    border: 'none',
-    background: 'none',
-  };
+  
+const menuItem: React.CSSProperties = {
+  width: "100%",   // <-- aqui está o limitador
+  height: 41,
+  marginBottom: 17,
+  display: 'flex',
+  alignItems: 'center',
+  paddingLeft: 15,
+  cursor: 'pointer',
+  userSelect: 'none',
+  border: 'none',
+  background: 'none',
+};
+
   // Inativo: neutro claro; Ativo: laranja (mock)
   const activeMenuItem: React.CSSProperties = {
     backgroundColor: '#FC8200',
+    borderRight: '4px solid #0056b3'
   };
   const inactiveMenuItem: React.CSSProperties = {
-    backgroundColor: '#e8eef5',
+    backgroundColor: '#dfe7ef',
+    width: '100%'
   };
   const menuText: React.CSSProperties = {
     fontSize: 23,

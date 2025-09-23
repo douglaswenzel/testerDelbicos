@@ -184,6 +184,7 @@ export default function Formnovo() {
           <View style={styles.inputColSenha}>
             <Text style={styles.label}><TextCostumization>Senha</TextCostumization></Text>
             <TextInput
+            
               style={styles.input}
               value={form.senha}
               onChangeText={text => handleChange("senha", text)}
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   formWrapper: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    width: '97%',
+    width: '100%',
     maxWidth: 1100,
     padding: 24,
     paddingLeft: 40,

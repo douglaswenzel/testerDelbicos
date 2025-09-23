@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   menuSection: {
     width: 250,
-    backgroundColor: '#f0f2f5',
+    backgroundColor: '#dfe7ef',
     paddingVertical: 20,
   },
   mainContent: {
