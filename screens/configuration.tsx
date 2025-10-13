@@ -2,21 +2,36 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 
 import MenuNavegacao from '../components/MenuNavegacao';
-import UserProfile, { UserProfileProps } from '../components/UserProfile';
-import AltEndereco from '../components/FormAltearEndereco';
+import AlterarEnderecoForm from '../components/AlterarEnderecoForm';
+import DadosContaForm from '../components/DadosContaForm';
+import TrocarSenhaForm from '../components/TrocarSenhaForm';
+import NotificacoesContent from '../components/NotificacoesContent';
 
-interface ConfigurationProps {
-  user: UserProfileProps
+interface UserProfileProps {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhone: string;
+  avatarSource: { uri: string | null };
+  onAvatarChange: (base64: string | null) => Promise<void>;
+  uploading?: boolean;
 }
 
-const Configuration = ({user}: ConfigurationProps) => {
+
+
+const Configuration: React.FC<{ user: UserProfileProps }> = ({ user }) => {
   const [currentScreen, setCurrentScreen] = useState('MeusEnderecos');
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'MeusEnderecos':
-        return <AltEndereco />;
-
+        return <AlterarEnderecoForm />;
+      case 'DadosContaForm':
+        return <DadosContaForm user={user} />;
+      case 'TrocarSenhaForm':
+        return <TrocarSenhaForm />;
+      case 'Notificacoes':
+        return <NotificacoesContent  userId={user.userId}/>;
       default:
         return <Text style={styles.contentText}>Selecione uma opção no menu</Text>;
     }
@@ -25,9 +40,9 @@ const Configuration = ({user}: ConfigurationProps) => {
   return (
     <ScrollView style={styles.container}>
       {/* Cabeçalho superior (se houver) */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <UserProfile {...user} />
-      </View>
+      </View> */}
 
       {/* Wrapper principal que contém o menu lateral e o conteúdo */}
       <View style={styles.bodyWrapper}>
@@ -47,7 +62,7 @@ const Configuration = ({user}: ConfigurationProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Faz com que a tela ocupe todo o espaço vertical
+    flex: 1,
     backgroundColor: '#dde6f0',
   },
   header: {
@@ -66,16 +81,16 @@ const styles = StyleSheet.create({
     }),
   },
   bodyWrapper: {
-    flex: 1, // Permite que esta View ocupe o espaço vertical restante
-    flexDirection: 'row', // Alinha o menu e o conteúdo lado a lado
+    flex: 1,
+    flexDirection: 'row',
   },
   menuSection: {
-    width: 250, // Largura fixa do menu lateral
+    width: 250,
     backgroundColor: '#f0f2f5',
     paddingVertical: 20,
   },
   mainContent: {
-    flex: 1, // Faz com que esta View ocupe todo o espaço horizontal restante.
+    flex: 1,
     padding: 20,
   },
   contentText: {
