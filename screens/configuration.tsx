@@ -5,6 +5,7 @@ import MenuNavegacao from '../components/MenuNavegacao';
 import AlterarEnderecoForm from '../components/AlterarEnderecoForm';
 import DadosContaForm from '../components/DadosContaForm';
 import TrocarSenhaForm from '../components/TrocarSenhaForm';
+import NotificacoesContent from '../components/NotificacoesContent';
 
 interface UserProfileProps {
   userId: string;
@@ -29,6 +30,8 @@ const Configuration: React.FC<{ user: UserProfileProps }> = ({ user }) => {
         return <DadosContaForm user={user} />;
       case 'TrocarSenhaForm':
         return <TrocarSenhaForm />;
+      case 'Notificacoes':
+        return <NotificacoesContent  userId={user.userId}/>;
       default:
         return <Text style={styles.contentText}>Selecione uma opção no menu</Text>;
     }

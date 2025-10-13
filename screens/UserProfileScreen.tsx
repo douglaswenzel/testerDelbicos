@@ -21,7 +21,7 @@ const UserProfileScreen: React.FC = () => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
 
-  const userId = '4';
+  const userId = '1';
 
   const uploadAvatarToServer = async (base64Image: string) => {
     try {
@@ -103,7 +103,7 @@ const UserProfileScreen: React.FC = () => {
         const storageKey = `userImages/${userId}/avatar.uri`;
         localStorage.removeItem(storageKey);
       } else {
-        const userImageDir = `${FileSystem.documentDirectory}userImages/${userId}`;
+        const userImageDir = `userImages/${userId}`;
         const avatarPath = `${userImageDir}/avatar.jpg`;
         const fileInfo = await FileSystem.getInfoAsync(avatarPath);
         if (fileInfo.exists) {
@@ -152,7 +152,7 @@ const UserProfileScreen: React.FC = () => {
     }
 
     try {
-      const userImageDir = `${FileSystem.documentDirectory}userImages/${userId}`;
+      const userImageDir = `userImages/${userId}`;
       const avatarPath = `${userImageDir}/avatar.jpg`;
       const fileInfo = await FileSystem.getInfoAsync(avatarPath);
       
