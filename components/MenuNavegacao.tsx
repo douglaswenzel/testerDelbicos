@@ -1,7 +1,7 @@
-
+// MenuNavegacao.tsx (Corrigido para React Native)
 import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'; // ⬅️ IMPORTAÇÕES NATIVAS
 import TextCostumization from './TextCostumization';
-
 
 type MenuNavegacaoProps = {
   onItemSelected?: (screen: string) => void;
@@ -14,19 +14,7 @@ type MenuItem = {
   screen: string;
 };
 
-
-const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
-  onItemSelected,
-  initialActive = 'DadosConta',
-}) => {
-  const [activeItem, setActiveItem] = useState(initialActive);
-  
-  // Sincroniza quando a tela ativa fornecida pelo pai mudar
-  useEffect(() => {
-    setActiveItem(initialActive);
-  }, [initialActive]);
-
-  const menuItems: MenuItem[] = [
+const menuItems: MenuItem[] = [
     { id: 1, title: 'Conta', screen: 'DadosContaForm' },
     { id: 2, title: 'Endereços', screen: 'MeusEnderecos' },
     { id: 3, title: 'Segurança', screen: 'TrocarSenhaForm' },
@@ -38,7 +26,18 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     { id: 9, title: 'Histórico', screen: 'Historico' },
     { id: 10, title: 'Pagamentos', screen: 'Pagamentos' },
     { id: 11, title: 'Ajuda', screen: 'Ajuda' },
-  ];
+];
+
+
+const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
+  onItemSelected,
+  initialActive = 'DadosConta',
+}) => {
+  const [activeItem, setActiveItem] = useState(initialActive);
+
+  useEffect(() => {
+    setActiveItem(initialActive);
+  }, [initialActive]);
 
   const handlePress = (screen: string) => {
     setActiveItem(screen);
@@ -47,68 +46,70 @@ const MenuNavegacao: React.FC<MenuNavegacaoProps> = ({
     }
   };
 
-  // Estilos para web
-  const menuContainer: React.CSSProperties = {
-    margin: '20px 0',
-    maxWidth: '100%',
-  };
-  const menuItem: React.CSSProperties = {
-    width: "90%",
-    height: 41,
-    borderRadius: 20,
-    marginBottom: 17,
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: 15,
-    cursor: 'pointer',
-    userSelect: 'none',
-    border: 'none',
-    background: 'none',
-  };
-  // Inativo: neutro claro; Ativo: laranja (mock)
-  const activeMenuItem: React.CSSProperties = {
-    backgroundColor: '#FC8200',
-  };
-  const inactiveMenuItem: React.CSSProperties = {
-    backgroundColor: '#e8eef5',
-  };
-  const menuText: React.CSSProperties = {
-    fontSize: 23,
-    fontWeight: 400,
-    color: '#222',
-  };
-  const activeMenuText: React.CSSProperties = {
-    color: '#fff',
-  };
-
   return (
-    <div>
-      <div style={menuContainer}>
-        {menuItems.map((item) => {
-          const isActive = item.screen === activeItem;
-          return (
-            <button
-              key={item.id}
-              style={{
-                ...menuItem,
-                ...(isActive ? activeMenuItem : inactiveMenuItem),
-              }}
-              onClick={() => handlePress(item.screen)}
+    // Usa <View> no lugar de <div>
+    <View style={styles.menuContainer}> 
+      {menuItems.map((item) => {
+        const isActive = item.screen === activeItem;
+        
+        // Usa TouchableOpacity no lugar de <button>
+        return (
+          <TouchableOpacity 
+            key={item.id}
+            style={[
+              styles.menuItem,
+              isActive ? styles.activeMenuItem : styles.inactiveMenuItem,
+            ]}
+            onPress={() => handlePress(item.screen)}
+          >
+            {/* Usa o TextCostumization corrigido */}
+            <TextCostumization
+              style={[
+                styles.menuText,
+                isActive ? styles.activeMenuText : {},
+              ]}
             >
-              <TextCostumization
-                style={{
-                  ...menuText,
-                  ...(isActive ? activeMenuText : {}),
-                }}
-              >
-                {item.title}
-              </TextCostumization>
-            </button>
-          );
-        })}
-      </div>
-    </div>
+              {item.title}
+            </TextCostumization>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
   );
 };
+
+// Estilos convertidos para React Native StyleSheet
+const styles = StyleSheet.create({
+    menuContainer: {
+        marginVertical: 20, // '20px 0' -> marginVertical
+        width: '100%',     // maxWidth: '100%'
+        // React Native não precisa de display: 'flex' (é o padrão)
+    },
+    menuItem: {
+        width: "90%",
+        height: 41,
+        borderRadius: 20,
+        marginBottom: 17,
+        flexDirection: 'row', // Para alinhar itens horizontalmente (display: flex)
+        alignItems: 'center',
+        paddingLeft: 15,
+        // Propriedades web removidas: cursor, userSelect, border, background
+    },
+    // Inativo: neutro claro; Ativo: laranja (mock)
+    activeMenuItem: {
+        backgroundColor: '#FC8200',
+    },
+    inactiveMenuItem: {
+        backgroundColor: '#e8eef5',
+    },
+    menuText: {
+        fontSize: 23,
+        fontWeight: '400',
+        color: '#222',
+    },
+    activeMenuText: {
+        color: '#fff',
+    },
+});
 
 export default MenuNavegacao;

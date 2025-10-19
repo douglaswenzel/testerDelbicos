@@ -1,7 +1,9 @@
+// screens/UserProfileScreen.tsx
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Alert, Platform } from 'react-native';
+import { View, ActivityIndicator, Alert, Platform, StyleSheet } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import Configuration from './configuration';
+import { useNotifications } from '../hooks/useNotifications';
 
 interface User {
   id: number;
@@ -23,6 +25,9 @@ const UserProfileScreen: React.FC = () => {
 
   const userId = '1';
 
+  // Usar o hook de notificações - verifica automaticamente a cada 30 segundos
+  useNotifications(userId, 30000);
+
   const uploadAvatarToServer = async (base64Image: string) => {
     try {
       setUploading(true);
@@ -31,7 +36,7 @@ const UserProfileScreen: React.FC = () => {
       console.log('📤 Tipo MIME detectado:', base64Image.substring(0, 50));
       console.log('📤 Tamanho do base64:', base64Image.length);
       
-      const response = await fetch(`http://localhost:3000/api/user/${userId}/avatar`, {
+      const response = await fetch(`http://192.168.1.136:3000/api/user/${userId}/avatar`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -59,7 +64,7 @@ const UserProfileScreen: React.FC = () => {
       const data = await response.json();
       console.log('✅ Resposta do servidor:', data);
       
-      const newUri = `http://localhost:3000/${data.avatarUri}`;
+      const newUri = `http://192.168.1.136:3000/${data.avatarUri}`;
       setAvatarUri(newUri);
       Alert.alert('Sucesso', 'Avatar atualizado com sucesso!');
       return data;
@@ -88,7 +93,7 @@ const UserProfileScreen: React.FC = () => {
 
   const removeAvatar = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/user/${userId}/avatar`, {
+      const response = await fetch(`http://192.168.1.136:3000/api/user/${userId}/avatar`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -143,7 +148,7 @@ const UserProfileScreen: React.FC = () => {
       return;
     }
 
-    const fullAvatarUrl = `http://localhost:3000/${apiAvatarUri}`;
+    const fullAvatarUrl = `http://192.168.1.136:3000/${apiAvatarUri}`;
     
     if (Platform.OS === 'web') {
       setAvatarUri(fullAvatarUrl);
@@ -174,7 +179,7 @@ const UserProfileScreen: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/user/${userId}`);
+        const response = await fetch(`http://192.168.1.136:3000/api/user/${userId}`);
         if (!response.ok) throw new Error('Erro ao buscar usuário');
 
         const data: User = await response.json();
@@ -203,18 +208,26 @@ const UserProfileScreen: React.FC = () => {
   if (!userData) return null;
 
   return (
-    <Configuration 
-      user={{ 
-        userId: String(userData.id), 
-        userName: userData.name,
-        userEmail: userData.email,
-        userPhone: userData.phone,
-        avatarSource: { uri: avatarUri },
-        onAvatarChange: handleAvatarChange,
-        uploading: uploading
-      }}
-    />
+    <View style={styles.container}>
+      <Configuration 
+        user={{ 
+          userId: String(userData.id), 
+          userName: userData.name,
+          userEmail: userData.email,
+          userPhone: userData.phone,
+          avatarSource: { uri: avatarUri },
+          onAvatarChange: handleAvatarChange,
+          uploading: uploading
+        }}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default UserProfileScreen;

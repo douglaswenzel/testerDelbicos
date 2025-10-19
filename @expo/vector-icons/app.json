@@ -1,29 +1,37 @@
 {
   "expo": {
-    "name": "vector-icons",
-    "slug": "vector-icons",
+    "name": "Delbicos App",
+    "slug": "delbicos-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/delbicos-logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/delbicos-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.delbicos.app",
+      "icon": "./assets/delbicos-logo.png",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/delbicos-logo.png",
         "backgroundColor": "#ffffff"
       },
+      "notification": {
+        "icon": "./assets/delbicos-logo.png",
+        "color": "#FC8200"
+      },
+      "package": "com.delbicos.app",
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/delbicos-logo.png"
     }
   }
 }

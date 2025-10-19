@@ -1,22 +1,25 @@
+// components/NotificacoesContent.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
     FlatList, 
     StyleSheet, 
     Alert,
-    View 
+    View,
+    Image,
+    ScrollView 
 } from 'react-native';
 import { 
     Surface, 
     Text, 
     ActivityIndicator, 
     Card, 
+    useTheme,
+    Modal,
+    Portal,
     Button,
-    useTheme
 } from 'react-native-paper'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 
-// Defina a interface para a notificação
 interface Notification {
     id: number;
     title: string;
@@ -26,40 +29,50 @@ interface Notification {
     user_id: number;
 }
 
-// *** MUDAR PARA SEU IP LOCAL E PORTA CORRETA ***
-const BASE_URL = 'http://localhost:3000/api'; 
+const BASE_URL = 'http://192.168.1.136:3000/api'; 
 
 interface NotificacoesContentProps {
-    userId: string; 
+    userId: string;
 }
 
 const NotificacoesContent: React.FC<NotificacoesContentProps> = ({ userId }) => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
     
     const { colors } = useTheme();
 
     // Função para buscar notificações
     const fetchNotifications = useCallback(async () => {
         try {
-            setLoading(true);
+            setLoading(true);  
             const response = await axios.get(`${BASE_URL}/notifications/${userId}`);
-            setNotifications(response.data);
+            const apiNotifications = response.data as Notification[];
+            setNotifications(apiNotifications);
         } catch (err) {
             setError('Erro ao carregar notificações.');
             console.error(err);
         } finally {
             setLoading(false);
         }
-    }, [userId]);
+    }, [userId]); 
 
-    // Função para marcar uma notificação como lida
-    const markAsRead = useCallback(async (notificationId: number, userId: number) => {
+    useEffect(() => {
+        fetchNotifications();
+    }, [fetchNotifications]);
+
+    // Função para marcar UMA notificação como lida
+    const markAsRead = useCallback(async (notificationId: number) => {
+        const isCurrentlyUnread = notifications.find(n => n.id === notificationId && !n.is_read);
+        
+        if (!isCurrentlyUnread) {
+            console.log(`Notificação ${notificationId} já está lida. Ignorando chamada à API.`);
+            return;
+        }
+
         try {
-            await axios.patch(`${BASE_URL}/notifications/read/${userId}`);
-            
-            // Atualiza o estado local
+            await axios.patch(`${BASE_URL}/notifications/${notificationId}/read/${userId}`); 
             setNotifications(prev => 
                 prev.map(notif => 
                     notif.id === notificationId ? { ...notif, is_read: true } : notif
@@ -67,78 +80,89 @@ const NotificacoesContent: React.FC<NotificacoesContentProps> = ({ userId }) => 
             );
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível marcar a notificação como lida.');
-            console.error(err);
+            console.error('Erro ao marcar como lida:', err);
         }
-    }, []);
+    }, [userId, notifications]);
 
-    // Função para marcar todas como lidas
-    const markAllAsRead = useCallback(async () => {
-        try {
-            await axios.patch(`${BASE_URL}/notifications/${userId}/read-all`);
-            
-            // Atualiza o estado local
-            setNotifications(prev => 
-                prev.map(notif => ({ ...notif, is_read: true }))
-            );
-        } catch (err) {
-            Alert.alert('Erro', 'Não foi possível marcar todas as notificações como lidas.');
-            console.error(err);
+    // Função para abrir o modal
+    const handleNotificationPress = (item: Notification) => {
+        setSelectedNotification(item);
+        if (!item.is_read) {
+            markAsRead(item.id);
         }
-    }, [userId]);
+    };
 
-    useEffect(() => {
-        fetchNotifications();
-    }, [fetchNotifications]);
+    // Função para fechar o modal
+    const hideModal = () => setSelectedNotification(null);
 
+    // Formata a data/hora
+    const formatTime = (dateString: string) => {
+       const date = new Date(dateString);
+       return date.toLocaleTimeString('pt-BR', { 
+           hour: '2-digit', 
+           minute: '2-digit', 
+           hour12: false
+       });
+    };
+    
     const renderItem = ({ item }: { item: Notification }) => {
-        const iconName = item.is_read ? "check-circle-outline" : "alert-circle"; 
-        const iconColor = item.is_read ? colors.surfaceVariant : colors.error;
+        const isUnread = !item.is_read;
+        const logoSource = isUnread 
+            ? require('../assets/delbicos-logo.png') 
+            : require('../assets/delbicos-logo-grey.png'); 
+        
+        const cardStyle = isUnread ? styles.unreadCard : styles.readCard;
+        const titleColor = isUnread ? '#FC8200' : colors.onSurfaceVariant; 
+        const descriptionColor = isUnread ? '#005A93' : colors.onSurfaceVariant; 
 
         return (
             <Card 
-                style={[styles.card, !item.is_read && styles.unreadCard]}
-                onPress={() => !item.is_read && markAsRead(item.id)}
-                disabled={item.is_read}
-                elevation={item.is_read ? 1 : 2} 
+                style={[styles.card, cardStyle]}
+                onPress={() => handleNotificationPress(item)}
+                elevation={isUnread ? 4 : 2} 
             >
                 <Card.Content style={styles.cardContent}>
-                    <MaterialCommunityIcons 
-                        name={iconName as any} 
-                        size={28} 
-                        color={iconColor} 
-                        style={styles.icon}
+                    <Image
+                        source={logoSource} 
+                        style={styles.logo}
                     />
+                    
                     <View style={styles.textContainer}>
                         <Text 
                             style={[
                                 styles.title, 
-                                { color: !item.is_read ? colors.onSurface : colors.onSurfaceVariant }
+                                { color: titleColor, fontWeight: isUnread ? '700' : '400' }
                             ]}
                             numberOfLines={1}
                         >
                             {item.title}
                         </Text>
+                        
                         <Text 
                             style={[
                                 styles.message, 
-                                { color: colors.onSurfaceVariant }
+                                { color: descriptionColor }
                             ]}
-                            numberOfLines={2}
+                            numberOfLines={2} 
                         >
                             {item.message}
                         </Text>
-                        <Text style={styles.date}>
-                            {new Date(item.createdAt).toLocaleString()}
-                        </Text>
                     </View>
                     
+                    <Text 
+                        style={[
+                            styles.date,
+                            { color: colors.onSurfaceVariant, fontWeight: isUnread ? '400' : '300' }
+                        ]}
+                    >
+                        {formatTime(item.createdAt)}
+                    </Text>
                 </Card.Content>
             </Card>
         );
     };
 
-    // --- RENDERIZAÇÃO DE ESTADOS ---
-    if (loading) {
+    if (loading && notifications.length === 0) {
         return <ActivityIndicator size="large" color={colors.primary} style={styles.centered} />;
     }
 
@@ -146,32 +170,52 @@ const NotificacoesContent: React.FC<NotificacoesContentProps> = ({ userId }) => 
         return <Text style={[styles.errorText, {color: colors.error}]}>{error}</Text>;
     }
 
-    if (notifications.length === 0) {
+    if (notifications.length === 0 && !loading) {
         return <Text style={styles.emptyText}>Você não tem notificações.</Text>;
     }
     
-    const unreadCount = notifications.filter(n => !n.is_read).length;
-
     return (
         <Surface style={styles.container}>
-            {unreadCount > 0 && (
-                <Button 
-                    mode="contained"
-                    icon="check-all"
-                    onPress={markAllAsRead} 
-                    loading={loading}
-                    disabled={loading}
-                    style={{ marginBottom: 15 }}
-                >
-                    Marcar {unreadCount} como lidas
-                </Button>
-            )}
             <FlatList
                 data={notifications}
                 renderItem={renderItem}
                 keyExtractor={item => String(item.id)}
                 contentContainerStyle={styles.listContent}
             />
+
+            <Modal 
+                visible={!!selectedNotification} 
+                onDismiss={hideModal} 
+                contentContainerStyle={[styles.modalContent, {backgroundColor: colors.surface}]}
+            >
+                {selectedNotification && (
+                    <View style={styles.modalInnerContainer}>
+                        <Text style={[styles.modalTitle, {color: '#FC8200'}]}>
+                            {selectedNotification.title}
+                        </Text>
+
+                        <ScrollView style={styles.modalMessageScroll}>
+                            <Text style={styles.modalMessage}>
+                                {selectedNotification.message}
+                        </Text>
+                        </ScrollView>
+
+                        <Text style={styles.modalDate}>
+                            {new Date(selectedNotification.createdAt).toLocaleDateString('pt-BR')} às {formatTime(selectedNotification.createdAt)}
+                        </Text>
+
+                        <Button 
+                            onPress={hideModal} 
+                            mode="contained" 
+                            style={styles.modalButton}
+                            labelStyle={styles.modalButtonLabel}
+                            buttonColor='#FC8200'
+                        >
+                            Fechar
+                        </Button>
+                    </View>
+                )}
+            </Modal>
         </Surface>
     );
 };
@@ -191,39 +235,51 @@ const styles = StyleSheet.create({
     },
     card: {
         marginBottom: 10,
-        borderRadius: 12,
+        borderRadius: 50, 
         backgroundColor: '#fff', 
     },
     unreadCard: {
-        borderLeftWidth: 5,
-        borderLeftColor: '#FC8200',
+        borderWidth: 2, 
+        borderColor: '#FC8200',
+    },
+    readCard: {
+        borderWidth: 1,
+        borderColor: '#eee', 
     },
     cardContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
+        paddingVertical: 10, 
+        paddingHorizontal: 16,
     },
-    icon: {
+    logo: {
+        width: 47,
+        height: 47,
+        borderRadius: 50,
         marginRight: 15,
-        alignSelf: 'flex-start',
+        shadowColor: "rgba(0, 0, 0, 0.25)",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 1,
+        shadowRadius: 4,
     },
     textContainer: {
         flex: 1,
+        justifyContent: 'center',
     },
     title: {
         fontSize: 16,
         lineHeight: 20,
-        marginBottom: 4,
-        fontWeight: 'bold',
     },
     message: {
         fontSize: 13,
         lineHeight: 18,
     },
     date: {
-        fontSize: 10,
-        color: '#aaa',
-        marginTop: 6,
+        fontSize: 16, 
+        lineHeight: 20,
+        color: '#000000', 
+        marginLeft: 10,
+        alignSelf: 'center', 
     },
     errorText: {
         textAlign: 'center',
@@ -235,7 +291,65 @@ const styles = StyleSheet.create({
         color: '#666',
         marginTop: 20,
         fontSize: 16,
-    }
+    },
+    
+    // --- ESTILOS DO MODAL CORRIGIDOS ---
+    modalContent: {
+        marginHorizontal: 20,
+        marginVertical: 40,
+        padding: 20,
+        borderRadius: 16,
+        alignSelf: 'center',
+        width: '90%',
+        maxHeight: 'auto', 
+        minHeight: 'auto',
+    },
+    modalInnerContainer: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'center',
+        lineHeight: 24,
+    },
+    messageContainer: {
+        flex: 1,
+        minHeight: 100,
+        marginVertical: 12,
+    },
+    modalMessageScroll: {
+        flex: 1,
+    },
+    scrollContent: {
+        flexGrow: 1,
+        paddingRight: 8, // Espaço para a scrollbar
+    },
+    modalMessage: {
+        fontSize: 16,
+        lineHeight: 22,
+        color: '#333',
+        textAlign: 'left',
+    },
+    modalFooter: {
+        marginTop: 16,
+    },
+    modalDate: {
+        fontSize: 14,
+        color: '#666',
+        textAlign: 'center',
+        marginBottom: 16,
+    },
+    modalButton: {
+        borderRadius: 12,
+        marginHorizontal: 10,
+    },
+    modalButtonLabel: {
+        fontSize: 16,
+        paddingVertical: 4,
+    },
 });
 
 export default NotificacoesContent;

@@ -1,20 +1,27 @@
 import React from "react";
+import { Text, TextStyle, StyleProp } from "react-native"; 
 
-type Props = React.HTMLAttributes<HTMLSpanElement> & {
+
+type Props = {
   children: React.ReactNode;
+  style?: StyleProp<TextStyle>; 
 };
 
 const TextCostumization: React.FC<Props> = ({ style, children, ...props }) => (
-  <span
-    style={{
-      fontFamily: "Inter, Arial, sans-serif",
-      fontWeight: 400,
-      ...style,
-    }}
-    {...props}
+  <Text
+    style={[
+      {
+        // Defina a família de fontes padrão aqui, se estiver carregada via useFonts
+        // fontFamily: "Alata_400Regular", 
+        fontWeight: '400',
+      },
+      style, // Aplica estilos passados como props
+    ]}
+    // Note: React Native não tem 'props' arbitrárias como HTML (ex: className)
+    // Se precisar passar props nativas (como numberOfLines), defina-as explicitamente.
   >
     {children}
-  </span>
+  </Text>
 );
 
 export default TextCostumization;
